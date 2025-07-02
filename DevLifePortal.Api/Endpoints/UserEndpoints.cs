@@ -14,7 +14,8 @@ namespace DevLifePortal.Api.Endpoints
             {
                 var createdUser = await userService.RegisterUser(user);
                 return Results.Created((string?)null, createdUser);
-            });
+            })
+            .WithTags("User");
 
             app.MapPost("/login", async (HttpContext context, IUserService userService, [FromBody] string username) =>
             {
@@ -39,14 +40,16 @@ namespace DevLifePortal.Api.Endpoints
                 await context.SignInAsync("DevLifeCookieAuth", principal);
 
                 return Results.Ok();
-            });
+            })
+            .WithTags("User"); ;
 
             app.MapPost("/logout", async (HttpContext context) =>
             {
                 context.Session.Clear();
                 await context.SignOutAsync("DevLifeCookieAuth");
                 return Results.Ok();
-            });
+            })
+            .WithTags("User"); ;
 
             app.MapGet("/me", async (HttpContext context, IUserService userService) =>
             {
@@ -54,7 +57,9 @@ namespace DevLifePortal.Api.Endpoints
                 var user = await userService.GetUserByUsernameAsync(username!);
 
                 return Results.Ok(user);
-            }).RequireAuthorization();
+            })
+            .RequireAuthorization()
+            .WithTags("User"); ;
 
             return app;
         }
