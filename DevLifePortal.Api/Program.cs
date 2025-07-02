@@ -45,5 +45,6 @@ app.UseAuthorization();
 app.UseHttpsRedirection();
 
 app.MapUserEndpoints();
+app.MapDashboardEndpoints();
 
 app.Run();
