@@ -9,6 +9,7 @@ namespace DevLifePortal.Application
         public static IServiceCollection AddApplicationServices(this IServiceCollection services)
         {
             services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IDashboardService, DashboardService>();
 
             return services;
         }
