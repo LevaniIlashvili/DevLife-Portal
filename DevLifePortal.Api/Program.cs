@@ -1,8 +1,14 @@
+using DevLifePortal.Application;
+using DevLifePortal.Infrastructure;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
+
+builder.Services.AddInfrastructureServices(builder.Configuration);
+builder.Services.AddApplicationServices();
 
 builder.Services.AddAuthentication("DevLifeCookieAuth")
     .AddCookie("DevLifeCookieAuth", options =>
