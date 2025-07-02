@@ -13,7 +13,7 @@ namespace DevLifePortal.Api.Endpoints
             app.MapPost("/register", async (IUserService userService, User user) =>
             {
                 var createdUser = await userService.RegisterUser(user);
-                return Results.Ok(createdUser);
+                return Results.Created((string?)null, createdUser);
             });
 
             app.MapPost("/login", async (HttpContext context, IUserService userService, [FromBody] string username) =>
