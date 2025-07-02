@@ -33,10 +33,10 @@ namespace DevLifePortal.Api.Endpoints
                     new Claim(ClaimTypes.Name, user.Username)
                 };
 
-                var identity = new ClaimsIdentity(claims, "MyCookieAuth");
+                var identity = new ClaimsIdentity(claims, "DevLifeCookieAuth");
                 var principal = new ClaimsPrincipal(identity);
 
-                await context.SignInAsync("MyCookieAuth", principal);
+                await context.SignInAsync("DevLifeCookieAuth", principal);
 
                 return Results.Ok();
             });
@@ -44,7 +44,7 @@ namespace DevLifePortal.Api.Endpoints
             app.MapPost("/logout", async (HttpContext context) =>
             {
                 context.Session.Clear();
-                await context.SignOutAsync("MyCookieAuth");
+                await context.SignOutAsync("DevLifeCookieAuth");
                 return Results.Ok();
             });
 
