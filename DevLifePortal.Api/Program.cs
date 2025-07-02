@@ -1,3 +1,4 @@
+using DevLifePortal.Api.Middlewares;
 using DevLifePortal.Application;
 using DevLifePortal.Infrastructure;
 
@@ -33,6 +34,8 @@ if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
 }
+
+app.UseCustomExceptionHandler();
 
 app.UseSession();
 app.UseAuthentication();
