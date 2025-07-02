@@ -1,3 +1,4 @@
+using DevLifePortal.Api.Endpoints;
 using DevLifePortal.Api.Middlewares;
 using DevLifePortal.Application;
 using DevLifePortal.Infrastructure;
@@ -42,5 +43,7 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.UseHttpsRedirection();
+
+app.MapUserEndpoints();
 
 app.Run();
