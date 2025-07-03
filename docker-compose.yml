@@ -16,6 +16,7 @@ services:
       ConnectionStrings__PostgreSqlConnection: "Host=postgres;Port=5432;Database=${POSTGRES_DB};Username=${POSTGRES_USER};Password=${POSTGRES_PASSWORD}"
       MongoDbSettings__ConnectionString: "mongodb://${MONGO_INITDB_ROOT_USERNAME}:${MONGO_INITDB_ROOT_PASSWORD}@mongodb:27017"
       MongoDbSettings__DatabaseName: "DevLifePortalDb"
+      OpenAI__ApiKey: "${OPEN_AI_API_KEY}"
   postgres:
     image: postgres:16
     container_name: devlife_postgres
