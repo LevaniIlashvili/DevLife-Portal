@@ -10,5 +10,7 @@
         public string TechStack { get; set; } = string.Empty;
         public string ExperienceLevel { get; set; } = string.Empty;
         public string ZodiacSign { get; set; } = string.Empty;
+
+        public CodeCasinoProfile CodeCasinoProfile;
     }
 }
