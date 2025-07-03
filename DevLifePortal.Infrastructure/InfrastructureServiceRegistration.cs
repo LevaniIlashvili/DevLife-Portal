@@ -14,6 +14,7 @@ namespace DevLifePortal.Infrastructure
                 options.UseNpgsql(configuration.GetConnectionString("PostgreSqlConnection")));
 
             services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<ICodeCasinoProfileRepository, CodeCasinoProfileRepository>();
 
             return services;
         }
