@@ -1,0 +1,36 @@
+﻿using DevLifePortal.Application.Contracts.Application;
+using DevLifePortal.Application.DTOs;
+using Microsoft.AspNetCore.Mvc;
+
+namespace DevLifePortal.Api.Endpoints
+{
+    public static class CodeCasinoEndpoints
+    {
+        public static void MapCodeCasinoEndpoints(this IEndpointRouteBuilder endpoints)
+        {
+            var codeCasinoGroup = endpoints.MapGroup("/codecasino");
+
+            codeCasinoGroup.MapGet("/profile", async (ICodeCasinoService codeCasinoService, HttpContext context) =>
+            {
+                var userId = context.Session.GetString("UserId");
+
+                var profile = await codeCasinoService.GetProfile(int.Parse(userId));
+
+                return Results.Ok(profile);
+            });
+
+            codeCasinoGroup.MapGet("/challenge", async (ICodeCasinoService codeCasinoService, HttpContext context) =>
+            {
+                var username = context.Session.GetString("Username");
+                var codeSnippets = await codeCasinoService.GetSnippets(username);
+                return Results.Ok(codeSnippets);
+            });
+
+            codeCasinoGroup.MapPost("/challenge", async (ICodeCasinoService codeCasinoService, HttpContext context, [FromBody] CodeCasinoAnswerChallengeDTO answerChallengeDTO) =>
+            {
+                var userId = context.Session.GetString("UserId");
+                await codeCasinoService.AnswerChallenge(int.Parse(userId), answerChallengeDTO.ChoseCorrect, answerChallengeDTO.PointsWagered);
+            });
+        }
+    }
+}
