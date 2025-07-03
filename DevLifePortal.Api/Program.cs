@@ -47,5 +47,6 @@ app.UseHttpsRedirection();
 app.MapUserEndpoints();
 app.MapDashboardEndpoints();
 app.MapCodeCasinoEndpoints();
+app.MapCodeRoastEndpoints();
 
 app.Run();
