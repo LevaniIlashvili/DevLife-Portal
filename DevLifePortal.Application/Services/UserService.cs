@@ -7,10 +7,12 @@ namespace DevLifePortal.Application.Services
     public class UserService : IUserService
     {
         private readonly IUserRepository _userRepository;
+        private readonly ICodeCasinoProfileRepository _codeCasinoProfileRepository;
 
-        public UserService(IUserRepository userRepository)
+        public UserService(IUserRepository userRepository, ICodeCasinoProfileRepository codeCasinoProfileRepository)
         {
             _userRepository = userRepository;
+            _codeCasinoProfileRepository = codeCasinoProfileRepository;
         }
 
         public async Task<User?> GetUserByUsernameAsync(string username)
@@ -29,7 +31,11 @@ namespace DevLifePortal.Application.Services
 
             newUser.ZodiacSign = GetZodiacSign(newUser.DateOfBirth);
 
-            return await _userRepository.AddAsync(newUser);
+            var user = await _userRepository.AddAsync(newUser);
+
+            await _codeCasinoProfileRepository.CreateProfile(user.Id);
+
+            return user;
         }
 
         private static string GetZodiacSign(DateOnly date)
