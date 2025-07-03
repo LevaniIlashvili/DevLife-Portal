@@ -8,5 +8,6 @@ namespace DevLifePortal.Infrastructure
         public DevLifeDbContext(DbContextOptions<DevLifeDbContext> options) : base(options) { }
 
         public DbSet<User> Users => Set<User>();
+        public DbSet<CodeCasinoProfile> CodeCasinoProfiles => Set<CodeCasinoProfile>();
     }
 }
