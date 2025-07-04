@@ -47,6 +47,9 @@ namespace DevLifePortal.Infrastructure
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<ICodeCasinoProfileRepository, CodeCasinoProfileRepository>();
             services.AddScoped<IBugChaseProfileRepository, BugChaseProfileRepository>();
+            services.AddScoped<IDevDatingProfileRepository, DevDatingProfileRepository>();
+            services.AddScoped<IDevDatingFakeProfileRepository, DevDatingFakeProfileRepository>();
+            services.AddScoped<IDevDateSwipeRepository, DevDateSwipeRepository>();
 
             return services;
         }
