@@ -14,6 +14,7 @@ namespace DevLifePortal.Application
             services.AddScoped<ICodeRoastService, CodeRoastService>();
             services.AddScoped<IBugChaseService, BugChaseService>();
             services.AddScoped<IExcuseGeneratorService, ExcuseGeneratorService>();
+            services.AddScoped<IDevDatingService, DevDatingService>();
 
             services.AddSingleton<IOpenAiService, OpenAiService>();
 
