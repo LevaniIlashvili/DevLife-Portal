@@ -11,6 +11,7 @@
         public string ExperienceLevel { get; set; } = string.Empty;
         public string ZodiacSign { get; set; } = string.Empty;
 
-        public CodeCasinoProfile CodeCasinoProfile;
+        public CodeCasinoProfile CodeCasinoProfile { get; set; }
+        public BugChaseProfile BugChaseProfile { get; set; }
     }
 }
