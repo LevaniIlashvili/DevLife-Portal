@@ -10,5 +10,6 @@ namespace DevLifePortal.Infrastructure
         public DbSet<User> Users => Set<User>();
         public DbSet<CodeCasinoProfile> CodeCasinoProfiles => Set<CodeCasinoProfile>();
         public DbSet<BugChaseProfile> BugChaseProfiles => Set<BugChaseProfile>();
+        public DbSet<DevDatingProfile> DevDatingProfiles => Set<DevDatingProfile>();
     }
 }
