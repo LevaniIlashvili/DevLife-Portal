@@ -13,13 +13,13 @@ namespace DevLifePortal.Api.Endpoints
             codeRoastGroup.MapGet("/problem", async (ICodeRoastService codeRoastService, [FromQuery] string difficulty = "easy") =>
             {
                 var problem = await codeRoastService.GetProblem(difficulty);
-                return problem;
+                return Results.Ok(problem);
             });
 
             codeRoastGroup.MapPost("/problem", async (ICodeRoastService codeRoastService, [FromBody] CodeRoastSolutionDTO solutionDTO) =>
             {
                 var roast = await codeRoastService.RoastCode(solutionDTO.ProblemName, solutionDTO.Solution);
-                return roast;
+                return Results.Ok(roast);
             });
         }
     }
