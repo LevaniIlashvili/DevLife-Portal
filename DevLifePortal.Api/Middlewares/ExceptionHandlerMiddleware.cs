@@ -41,6 +41,10 @@ namespace DevLifePortal.Api.Middlewares
                     httpStatusCode = HttpStatusCode.BadRequest;
                     break;
 
+                case NotFoundException:
+                    httpStatusCode = HttpStatusCode.NotFound;
+                    break;
+
                 default:
                     _logger.LogError(exception, "An unexpected error occurred.");
                     result = JsonSerializer.Serialize(new { error = "An unexpected error occurred. Please try again later." });
