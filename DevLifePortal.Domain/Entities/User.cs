@@ -13,5 +13,6 @@
 
         public CodeCasinoProfile CodeCasinoProfile { get; set; }
         public BugChaseProfile BugChaseProfile { get; set; }
+        public DevDatingProfile DevDatingProfile { get; set; }
     }
 }
