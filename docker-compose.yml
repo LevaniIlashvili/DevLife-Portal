@@ -11,12 +11,16 @@ services:
         condition: service_healthy
       mongodb:
         condition: service_healthy
+      redis:
+        condition: service_healthy
     environment:
       ASPNETCORE_ENVIRONMENT: Development
       ConnectionStrings__PostgreSqlConnection: "Host=postgres;Port=5432;Database=${POSTGRES_DB};Username=${POSTGRES_USER};Password=${POSTGRES_PASSWORD}"
       MongoDbSettings__ConnectionString: "mongodb://${MONGO_INITDB_ROOT_USERNAME}:${MONGO_INITDB_ROOT_PASSWORD}@mongodb:27017"
       MongoDbSettings__DatabaseName: "DevLifePortalDb"
+      ConnectionStrings__Redis: "redis:6379"
       OpenAI__ApiKey: "${OPEN_AI_API_KEY}"
+
   postgres:
     image: postgres:16
     container_name: devlife_postgres
@@ -34,6 +38,7 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+
   mongodb:
     image: mongo:7
     container_name: devlife_mongo
@@ -51,6 +56,22 @@ services:
       timeout: 5s
       retries: 5
       start_period: 40s
+
+  redis:
+    image: redis:7
+    container_name: devlife_redis
+    restart: always
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
 volumes:
   pg_data:
   mongo_data:
+  redis_data:
