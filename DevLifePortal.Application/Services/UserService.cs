@@ -1,5 +1,6 @@
 ﻿using DevLifePortal.Application.Contracts.Application;
 using DevLifePortal.Application.Contracts.Infrastructure;
+using DevLifePortal.Application.DTOs;
 using DevLifePortal.Domain.Entities;
 
 namespace DevLifePortal.Application.Services
@@ -20,12 +21,26 @@ namespace DevLifePortal.Application.Services
             _bugChaseProfileRepository = bugChaseProfileRepository;
         }
 
-        public async Task<User?> GetUserByUsernameAsync(string username)
+        public async Task<UserDTO?> GetUserByUsernameAsync(string username)
         {
-            return await _userRepository.GetByUsernameAsync(username);
+            var user = await _userRepository.GetByUsernameAsync(username);
+
+            var userDTO = new UserDTO()
+            {
+                Id = user.Id,
+                Username = user.Username,
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                DateOfBirth = user.DateOfBirth,
+                ExperienceLevel = user.ExperienceLevel,
+                TechStack = user.TechStack,
+                ZodiacSign = user.ZodiacSign,
+            };
+
+            return userDTO;
         }
 
-        public async Task<User> RegisterUser(User newUser)
+        public async Task<UserDTO> RegisterUser(User newUser)
         {
             var existingUser = await _userRepository.GetByUsernameAsync(newUser.Username);
 
@@ -40,9 +55,21 @@ namespace DevLifePortal.Application.Services
 
             await _codeCasinoProfileRepository.CreateProfile(user.Id);
 
-            return user;
             await _bugChaseProfileRepository.CreateProfile(user.Id);
 
+            var userDTO = new UserDTO()
+            {
+                Id = user.Id,
+                Username = user.Username,
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                DateOfBirth = user.DateOfBirth,
+                ExperienceLevel = user.ExperienceLevel,
+                TechStack = user.TechStack,
+                ZodiacSign = user.ZodiacSign,
+            };
+
+            return userDTO;
         }
 
         private static string GetZodiacSign(DateOnly date)

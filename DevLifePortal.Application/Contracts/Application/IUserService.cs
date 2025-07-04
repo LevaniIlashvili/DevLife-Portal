@@ -1,10 +1,11 @@
-﻿using DevLifePortal.Domain.Entities;
+﻿using DevLifePortal.Application.DTOs;
+using DevLifePortal.Domain.Entities;
 
 namespace DevLifePortal.Application.Contracts.Application
 {
     public interface IUserService
     {
-        Task<User?> GetUserByUsernameAsync(string username);
-        Task<User> RegisterUser(User user);
+        Task<UserDTO?> GetUserByUsernameAsync(string username);
+        Task<UserDTO> RegisterUser(User user);
     }
 }
