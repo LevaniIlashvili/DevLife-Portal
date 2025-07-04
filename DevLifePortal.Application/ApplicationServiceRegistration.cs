@@ -13,6 +13,7 @@ namespace DevLifePortal.Application
             services.AddScoped<ICodeCasinoService, CodeCasinoService>();
             services.AddScoped<ICodeRoastService, CodeRoastService>();
             services.AddScoped<IBugChaseService, BugChaseService>();
+            services.AddScoped<IExcuseGeneratorService, ExcuseGeneratorService>();
 
             services.AddSingleton<IOpenAiService, OpenAiService>();
 
