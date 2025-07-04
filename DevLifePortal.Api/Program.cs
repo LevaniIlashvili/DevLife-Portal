@@ -56,6 +56,7 @@ app.MapUserEndpoints();
 app.MapDashboardEndpoints();
 app.MapCodeCasinoEndpoints();
 app.MapCodeRoastEndpoints();
+app.MapExcuseEndpoints();
 
 app.MapHub<BugChaseHub>("/bugchasehub");
 
