@@ -14,6 +14,11 @@ namespace DevLifePortal.Api.Endpoints
             {
                 var userId = context.Session.GetString("UserId");
 
+                if (string.IsNullOrEmpty(userId))
+                {
+                    return Results.Unauthorized();
+                }
+
                 var profile = await codeCasinoService.GetProfile(int.Parse(userId));
 
                 return Results.Ok(profile);
@@ -22,6 +27,12 @@ namespace DevLifePortal.Api.Endpoints
             codeCasinoGroup.MapGet("/challenge", async (ICodeCasinoService codeCasinoService, HttpContext context) =>
             {
                 var username = context.Session.GetString("Username");
+
+                if (string.IsNullOrEmpty(username))
+                {
+                    return Results.Unauthorized();
+                }
+
                 var codeSnippets = await codeCasinoService.GetSnippets(username);
                 return Results.Ok(codeSnippets);
             });
@@ -29,7 +40,15 @@ namespace DevLifePortal.Api.Endpoints
             codeCasinoGroup.MapPost("/challenge", async (ICodeCasinoService codeCasinoService, HttpContext context, [FromBody] CodeCasinoAnswerChallengeDTO answerChallengeDTO) =>
             {
                 var userId = context.Session.GetString("UserId");
+
+                if (string.IsNullOrEmpty(userId))
+                {
+                    return Results.Unauthorized();
+                }
+
                 await codeCasinoService.AnswerChallenge(int.Parse(userId), answerChallengeDTO.ChoseCorrect, answerChallengeDTO.PointsWagered);
+
+                return Results.Ok();
             });
         }
     }

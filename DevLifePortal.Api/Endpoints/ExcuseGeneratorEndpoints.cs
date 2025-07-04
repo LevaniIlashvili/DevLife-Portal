@@ -22,6 +22,11 @@ namespace DevLifePortal.Api.Endpoints
             {
                 var userId = context.Session.GetString("UserId");
 
+                if (string.IsNullOrEmpty(userId))
+                {
+                    return Results.Unauthorized();
+                }
+
                 await excuseGeneratorService.SaveFavoriteAsync(userId, excuse);
                 return Results.Ok();
             });
@@ -32,7 +37,7 @@ namespace DevLifePortal.Api.Endpoints
             {
                 var userId = context.Session.GetString("UserId");
 
-                if (userId == null)
+                if (string.IsNullOrEmpty(userId))
                 {
                     return Results.Unauthorized();
                 }
