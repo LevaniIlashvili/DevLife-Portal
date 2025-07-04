@@ -16,8 +16,7 @@ services:
     environment:
       ASPNETCORE_ENVIRONMENT: Development
       ConnectionStrings__PostgreSqlConnection: "Host=postgres;Port=5432;Database=${POSTGRES_DB};Username=${POSTGRES_USER};Password=${POSTGRES_PASSWORD}"
-      MongoDbSettings__ConnectionString: "mongodb://${MONGO_INITDB_ROOT_USERNAME}:${MONGO_INITDB_ROOT_PASSWORD}@mongodb:27017"
-      MongoDbSettings__DatabaseName: "DevLifePortalDb"
+      ConnectionStrings__MongoDB: "mongodb://${MONGO_INITDB_ROOT_USERNAME}:${MONGO_INITDB_ROOT_PASSWORD}@mongodb:27017/DevLife?authSource=admin"
       ConnectionStrings__Redis: "redis:6379"
       OpenAI__ApiKey: "${OPEN_AI_API_KEY}"
 
