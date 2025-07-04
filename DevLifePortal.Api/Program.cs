@@ -2,7 +2,10 @@ using DevLifePortal.Api.Endpoints;
 using DevLifePortal.Api.Hubs;
 using DevLifePortal.Api.Middlewares;
 using DevLifePortal.Application;
+using DevLifePortal.Domain.Entities;
 using DevLifePortal.Infrastructure;
+using DevLifePortal.Infrastructure.Mongo;
+using MongoDB.Driver;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -37,6 +40,13 @@ builder.Services.AddStackExchangeRedisCache(options =>
 });
 
 var app = builder.Build();
+
+using (var scope = app.Services.CreateScope())
+{
+    var seeder = scope.ServiceProvider.GetRequiredService<StaticDatingProfileSeeder>();
+    var collection = scope.ServiceProvider.GetRequiredService<IMongoCollection<DevDatingFakeProfile>>();
+    await seeder.SeedAsync(collection);
+}
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
