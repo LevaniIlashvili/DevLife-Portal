@@ -1,4 +1,5 @@
 using DevLifePortal.Api.Endpoints;
+using DevLifePortal.Api.Hubs;
 using DevLifePortal.Api.Middlewares;
 using DevLifePortal.Application;
 using DevLifePortal.Infrastructure;
@@ -8,6 +9,8 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
+
+builder.Services.AddSignalR();
 
 builder.Services.AddInfrastructureServices(builder.Configuration);
 builder.Services.AddApplicationServices();
@@ -48,5 +51,7 @@ app.MapUserEndpoints();
 app.MapDashboardEndpoints();
 app.MapCodeCasinoEndpoints();
 app.MapCodeRoastEndpoints();
+
+app.MapHub<BugChaseHub>("/bugchasehub");
 
 app.Run();
