@@ -19,6 +19,9 @@ services:
       ConnectionStrings__MongoDB: "mongodb://${MONGO_INITDB_ROOT_USERNAME}:${MONGO_INITDB_ROOT_PASSWORD}@mongodb:27017/DevLife?authSource=admin"
       ConnectionStrings__Redis: "redis:6379"
       OpenAI__ApiKey: "${OPEN_AI_API_KEY}"
+      GitHubOAuth__ClientId: "${GITHUB_OAUTH_CLIENT_ID}"
+      GitHubOAuth__ClientSecret: "${GITHUB_OAUTH_CLIENT_SECRET}"
+      GitHubOAuth__CallbackUrl: "${GITHUB_OAUTH_CALLBACK_URL}"
 
   postgres:
     image: postgres:16
