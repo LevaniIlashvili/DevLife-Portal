@@ -25,6 +25,35 @@ namespace DevLifePortal.Application.Services
         {
             var user = await _userRepository.GetByUsernameAsync(username);
 
+            if (user == null)
+            {
+                throw new Exceptions.NotFoundException("User not found");
+            }
+
+            var userDTO = new UserDTO()
+            {
+                Id = user.Id,
+                Username = user.Username,
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                DateOfBirth = user.DateOfBirth,
+                ExperienceLevel = user.ExperienceLevel,
+                TechStack = user.TechStack,
+                ZodiacSign = user.ZodiacSign,
+            };
+
+            return userDTO;
+        }
+
+        public async Task<UserDTO?> GetUserByIdAsync(int userId)
+        {
+            var user = await _userRepository.GetByIdAsync(userId);
+
+            if (user == null)
+            {
+                throw new Exceptions.NotFoundException("User not found");
+            }
+
             var userDTO = new UserDTO()
             {
                 Id = user.Id,

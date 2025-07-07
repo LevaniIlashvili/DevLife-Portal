@@ -18,6 +18,11 @@ namespace DevLifePortal.Infrastructure.Repositories
             return await _dbContext.Users.FirstOrDefaultAsync(u => u.Username == username);
         }
 
+        public async Task<User?> GetByIdAsync(int id)
+        {
+            return await _dbContext.Users.FirstOrDefaultAsync(u => u.Id == id);
+        }
+
         public async Task<User> AddAsync(User user)
         {
             await _dbContext.Users.AddAsync(user);
