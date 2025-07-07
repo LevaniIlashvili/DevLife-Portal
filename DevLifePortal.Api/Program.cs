@@ -26,7 +26,6 @@ builder.Services.AddAuthentication("DevLifeCookieAuth")
 
 builder.Services.AddAuthorization();
 
-builder.Services.AddDistributedMemoryCache();
 builder.Services.AddSession(options =>
 {
     options.Cookie.HttpOnly = true;
@@ -68,6 +67,7 @@ app.MapCodeCasinoEndpoints();
 app.MapCodeRoastEndpoints();
 app.MapExcuseEndpoints();
 app.MapDevDatingEndpoints();
+app.MapGithubAnalyzerEndpoints();
 
 app.MapHub<BugChaseHub>("/bugchasehub");
 
