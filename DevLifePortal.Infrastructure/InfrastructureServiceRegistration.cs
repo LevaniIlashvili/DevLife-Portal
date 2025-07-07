@@ -2,6 +2,7 @@
 using DevLifePortal.Domain.Entities;
 using DevLifePortal.Infrastructure.Mongo;
 using DevLifePortal.Infrastructure.Repositories;
+using DevLifePortal.Infrastructure.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -50,6 +51,8 @@ namespace DevLifePortal.Infrastructure
             services.AddScoped<IDevDatingProfileRepository, DevDatingProfileRepository>();
             services.AddScoped<IDevDatingFakeProfileRepository, DevDatingFakeProfileRepository>();
             services.AddScoped<IDevDateSwipeRepository, DevDateSwipeRepository>();
+
+            services.AddHttpClient<IGithubService, GithubService>();
 
             return services;
         }
