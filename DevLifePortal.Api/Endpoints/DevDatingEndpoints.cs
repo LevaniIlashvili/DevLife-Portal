@@ -1,4 +1,5 @@
 ﻿using DevLifePortal.Application.Contracts.Application;
+using DevLifePortal.Application.DTOs;
 using DevLifePortal.Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
 
@@ -28,7 +29,7 @@ namespace DevLifePortal.Api.Endpoints
             .WithTags("Dev Dating");
 
             devDatingGroup.MapPost("/profile", async (
-                DevDatingProfile profile,
+                DevDatingAddProfileDTO profile,
                 IDevDatingService devDatingService,
                 HttpContext context) =>
             {
@@ -39,9 +40,7 @@ namespace DevLifePortal.Api.Endpoints
                     return Results.Unauthorized();
                 }
 
-                profile.UserId = int.Parse(userId);
-
-                var addedProfile = await devDatingService.CreateProfileAsync(profile);
+                var addedProfile = await devDatingService.CreateProfileAsync(profile, int.Parse(userId));
 
                 return Results.Created($"/devdating/profile", addedProfile);
             })
