@@ -1,7 +1,9 @@
-﻿using DevLifePortal.Application.Contracts.Application;
+﻿using AutoMapper;
+using DevLifePortal.Application.Contracts.Application;
 using DevLifePortal.Application.Contracts.Infrastructure;
 using DevLifePortal.Application.DTOs;
 using DevLifePortal.Domain.Entities;
+using FluentValidation;
 
 namespace DevLifePortal.Application.Services
 {
@@ -10,15 +12,21 @@ namespace DevLifePortal.Application.Services
         private readonly IUserRepository _userRepository;
         private readonly ICodeCasinoProfileRepository _codeCasinoProfileRepository;
         private readonly IBugChaseProfileRepository _bugChaseProfileRepository;
+        private readonly IValidator<RegisterUserDTO> _validator;
+        private readonly IMapper _mapper;
 
         public UserService(
             IUserRepository userRepository, 
             ICodeCasinoProfileRepository codeCasinoProfileRepository,
-            IBugChaseProfileRepository bugChaseProfileRepository)
+            IBugChaseProfileRepository bugChaseProfileRepository,
+            IValidator<RegisterUserDTO> validator,
+            IMapper mapper)
         {
             _userRepository = userRepository;
             _codeCasinoProfileRepository = codeCasinoProfileRepository;
             _bugChaseProfileRepository = bugChaseProfileRepository;
+            _validator = validator;
+            _mapper = mapper;
         }
 
         public async Task<UserDTO?> GetUserByUsernameAsync(string username)
@@ -30,17 +38,7 @@ namespace DevLifePortal.Application.Services
                 throw new Exceptions.NotFoundException("User not found");
             }
 
-            var userDTO = new UserDTO()
-            {
-                Id = user.Id,
-                Username = user.Username,
-                FirstName = user.FirstName,
-                LastName = user.LastName,
-                DateOfBirth = user.DateOfBirth,
-                ExperienceLevel = user.ExperienceLevel,
-                TechStack = user.TechStack,
-                ZodiacSign = user.ZodiacSign,
-            };
+            var userDTO = _mapper.Map<UserDTO>(user);
 
             return userDTO;
         }
@@ -54,22 +52,12 @@ namespace DevLifePortal.Application.Services
                 throw new Exceptions.NotFoundException("User not found");
             }
 
-            var userDTO = new UserDTO()
-            {
-                Id = user.Id,
-                Username = user.Username,
-                FirstName = user.FirstName,
-                LastName = user.LastName,
-                DateOfBirth = user.DateOfBirth,
-                ExperienceLevel = user.ExperienceLevel,
-                TechStack = user.TechStack,
-                ZodiacSign = user.ZodiacSign,
-            };
+            var userDTO = _mapper.Map<UserDTO>(user);
 
             return userDTO;
         }
 
-        public async Task<UserDTO> RegisterUser(User newUser)
+        public async Task<UserDTO> RegisterUser(RegisterUserDTO newUser)
         {
             var existingUser = await _userRepository.GetByUsernameAsync(newUser.Username);
 
@@ -78,25 +66,21 @@ namespace DevLifePortal.Application.Services
                 throw new Exceptions.BadRequestException("User with this username already exists");
             }
 
+            var result = await _validator.ValidateAsync(newUser);
+            if (!result.IsValid)
+            {
+                throw new ValidationException(result.Errors);
+            }
+
             newUser.ZodiacSign = GetZodiacSign(newUser.DateOfBirth);
 
-            var user = await _userRepository.AddAsync(newUser);
+            var user = await _userRepository.AddAsync(_mapper.Map<User>(newUser));
 
             await _codeCasinoProfileRepository.CreateProfile(user.Id);
 
             await _bugChaseProfileRepository.CreateProfile(user.Id);
 
-            var userDTO = new UserDTO()
-            {
-                Id = user.Id,
-                Username = user.Username,
-                FirstName = user.FirstName,
-                LastName = user.LastName,
-                DateOfBirth = user.DateOfBirth,
-                ExperienceLevel = user.ExperienceLevel,
-                TechStack = user.TechStack,
-                ZodiacSign = user.ZodiacSign,
-            };
+            var userDTO = _mapper.Map<UserDTO>(user);
 
             return userDTO;
         }
