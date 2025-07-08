@@ -46,6 +46,13 @@ namespace DevLifePortal.Infrastructure
             });
 
             services.AddTransient<StaticDatingProfileSeeder>();
+            services.AddSingleton(serviceProvider =>
+            {
+                var client = serviceProvider.GetRequiredService<IMongoClient>();
+                var db = client.GetDatabase("DevLife");
+                return db.GetCollection<CodeCasinoChallenge>("code_casino_challenges");
+            });
+
 
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<ICodeCasinoProfileRepository, CodeCasinoProfileRepository>();
