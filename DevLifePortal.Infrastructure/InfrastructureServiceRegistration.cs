@@ -1,4 +1,6 @@
-﻿using DevLifePortal.Application.Contracts.Infrastructure;
+﻿using DevLifePortal.Application.Contracts.Application;
+using DevLifePortal.Application.Contracts.Infrastructure;
+using DevLifePortal.Application.Services;
 using DevLifePortal.Domain.Entities;
 using DevLifePortal.Infrastructure.Mongo;
 using DevLifePortal.Infrastructure.Repositories;
@@ -53,6 +55,8 @@ namespace DevLifePortal.Infrastructure
             services.AddScoped<IDevDateSwipeRepository, DevDateSwipeRepository>();
 
             services.AddHttpClient<IGithubService, GithubService>();
+
+            services.AddSingleton<IOpenAiService, OpenAiService>();
 
             return services;
         }
