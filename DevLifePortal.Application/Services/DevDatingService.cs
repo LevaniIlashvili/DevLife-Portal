@@ -1,5 +1,7 @@
-﻿using DevLifePortal.Application.Contracts.Application;
+﻿using AutoMapper;
+using DevLifePortal.Application.Contracts.Application;
 using DevLifePortal.Application.Contracts.Infrastructure;
+using DevLifePortal.Application.DTOs;
 using DevLifePortal.Domain.Entities;
 
 namespace DevLifePortal.Application.Services
@@ -10,27 +12,32 @@ namespace DevLifePortal.Application.Services
         private readonly IDevDatingFakeProfileRepository _fakeProfileRepository;
         private readonly IDevDateSwipeRepository _swipeRepository;
         private readonly IOpenAiService _openAiService;
+        private readonly IMapper _mapper;
 
         public DevDatingService(
             IDevDatingProfileRepository profileRepository, 
             IDevDatingFakeProfileRepository fakeProfileRepository,
             IDevDateSwipeRepository swipeRepository,
-            IOpenAiService openAiService)
+            IOpenAiService openAiService,
+            IMapper mapper)
         {
             _profileRepository = profileRepository;
             _fakeProfileRepository = fakeProfileRepository;
             _swipeRepository = swipeRepository;
             _openAiService = openAiService;
+            _mapper = mapper;
         }
 
-        public async Task<DevDatingProfile> CreateProfileAsync(DevDatingProfile profile)
+        public async Task<DevDatingProfileDTO> CreateProfileAsync(DevDatingAddProfileDTO profile, int userId)
         {
-            var addedProfile = await _profileRepository.AddAsync(profile);
+            var profileToAdd = _mapper.Map<DevDatingProfile>(profile);
+            profileToAdd.UserId = userId;
+            var addedProfile = await _profileRepository.AddAsync(profileToAdd);
 
-            return addedProfile;
+            return _mapper.Map<DevDatingProfileDTO>(addedProfile);
         }
 
-        public async Task<DevDatingProfile> GetProfileAsync(int userId)
+        public async Task<DevDatingProfileDTO> GetProfileAsync(int userId)
         {
             var profile = await _profileRepository.GetAsync(userId);
 
@@ -39,7 +46,7 @@ namespace DevLifePortal.Application.Services
                 throw new Exceptions.NotFoundException("Profile doesn't exist");
             }
 
-            return profile;
+            return _mapper.Map<DevDatingProfileDTO>(profile);
         }
 
         public async Task<DevDatingFakeProfile?> GetPotentialMatch(int userId)
