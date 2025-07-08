@@ -1,5 +1,5 @@
 ﻿using DevLifePortal.Application.Contracts.Application;
-using DevLifePortal.Domain.Entities;
+using DevLifePortal.Application.DTOs;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
@@ -10,7 +10,7 @@ namespace DevLifePortal.Api.Endpoints
     {
         public static IEndpointRouteBuilder MapUserEndpoints(this IEndpointRouteBuilder app)
         {
-            app.MapPost("/register", async (IUserService userService, User user) =>
+            app.MapPost("/register", async (IUserService userService, RegisterUserDTO user) =>
             {
                 var createdUser = await userService.RegisterUser(user);
                 return Results.Created((string?)null, createdUser);
