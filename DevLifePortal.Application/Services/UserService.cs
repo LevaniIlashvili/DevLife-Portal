@@ -2,6 +2,7 @@
 using DevLifePortal.Application.Contracts.Application;
 using DevLifePortal.Application.Contracts.Infrastructure;
 using DevLifePortal.Application.DTOs;
+using DevLifePortal.Application.Validators;
 using DevLifePortal.Domain.Entities;
 using FluentValidation;
 
@@ -12,20 +13,17 @@ namespace DevLifePortal.Application.Services
         private readonly IUserRepository _userRepository;
         private readonly ICodeCasinoProfileRepository _codeCasinoProfileRepository;
         private readonly IBugChaseProfileRepository _bugChaseProfileRepository;
-        private readonly IValidator<RegisterUserDTO> _validator;
         private readonly IMapper _mapper;
 
         public UserService(
             IUserRepository userRepository, 
             ICodeCasinoProfileRepository codeCasinoProfileRepository,
             IBugChaseProfileRepository bugChaseProfileRepository,
-            IValidator<RegisterUserDTO> validator,
             IMapper mapper)
         {
             _userRepository = userRepository;
             _codeCasinoProfileRepository = codeCasinoProfileRepository;
             _bugChaseProfileRepository = bugChaseProfileRepository;
-            _validator = validator;
             _mapper = mapper;
         }
 
@@ -66,7 +64,8 @@ namespace DevLifePortal.Application.Services
                 throw new Exceptions.BadRequestException("User with this username already exists");
             }
 
-            var result = await _validator.ValidateAsync(newUser);
+            var validator = new RegisterUserDTOValidator();
+            var result = await validator.ValidateAsync(newUser);
             if (!result.IsValid)
             {
                 throw new ValidationException(result.Errors);
