@@ -4,6 +4,7 @@ using DevLifePortal.Application.Contracts.Infrastructure;
 using DevLifePortal.Application.DTOs;
 using DevLifePortal.Application.Validators;
 using DevLifePortal.Domain.Entities;
+using FluentValidation;
 
 namespace DevLifePortal.Application.Services
 {
@@ -78,6 +79,15 @@ namespace DevLifePortal.Application.Services
 
         public async Task SwipeAsync(DevDatingSwipeActionDTO swipeActionDTO, int userId)
         {
+            var validator = new DevDatingSwipeActionDTOValidator();
+            var result = await validator.ValidateAsync(swipeActionDTO);
+            if (!result.IsValid)
+            {
+                throw new ValidationException(result.Errors);
+            }
+
+            var swipeAction = _mapper.Map<DevDatingSwipeAction>(swipeActionDTO);
+            swipeAction.UserId = userId;
             await _swipeRepository.SaveSwipeAsync(swipeAction);
         }
 
