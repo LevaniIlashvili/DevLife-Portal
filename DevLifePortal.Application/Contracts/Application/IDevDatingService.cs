@@ -1,11 +1,12 @@
-﻿using DevLifePortal.Domain.Entities;
+﻿using DevLifePortal.Application.DTOs;
+using DevLifePortal.Domain.Entities;
 
 namespace DevLifePortal.Application.Contracts.Application
 {
     public interface IDevDatingService
     {
-        Task<DevDatingProfile> CreateProfileAsync(DevDatingProfile profile);
-        Task<DevDatingProfile> GetProfileAsync(int userId);
+        Task<DevDatingProfileDTO> CreateProfileAsync(DevDatingAddProfileDTO profile, int userId);
+        Task<DevDatingProfileDTO> GetProfileAsync(int userId);
         Task<DevDatingFakeProfile?> GetPotentialMatch(int userId);
         Task SwipeAsync(DevDatingSwipeAction swipeAction);
         Task<List<DevDatingFakeProfile>> GetMatchesAsync(int userId);
