@@ -6,6 +6,7 @@ using DevLifePortal.Domain.Entities;
 using DevLifePortal.Infrastructure;
 using DevLifePortal.Infrastructure.Mongo;
 using MongoDB.Driver;
+using static DevLifePortal.Infrastructure.Mongo.Seeders;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -42,9 +43,11 @@ var app = builder.Build();
 
 using (var scope = app.Services.CreateScope())
 {
-    var seeder = scope.ServiceProvider.GetRequiredService<StaticDatingProfileSeeder>();
-    var collection = scope.ServiceProvider.GetRequiredService<IMongoCollection<DevDatingFakeProfile>>();
-    await seeder.SeedAsync(collection);
+    var datingSeeder = scope.ServiceProvider.GetRequiredService<DevDatingFakeProfileSeeder>();
+    await datingSeeder.SeedAsync();
+
+    var codeCasinoSeeder = scope.ServiceProvider.GetRequiredService<CodeCasinoChallengeSeeder>();
+    await codeCasinoSeeder.SeedAsync();
 }
 
 // Configure the HTTP request pipeline.
