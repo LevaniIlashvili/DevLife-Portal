@@ -3,9 +3,9 @@ using FluentValidation;
 
 namespace DevLifePortal.Application.Validators
 {
-    public class UserDtoValidator : AbstractValidator<RegisterUserDTO>
+    public class RegisterUserDTOValidator : AbstractValidator<RegisterUserDTO>
     {
-        public UserDtoValidator()
+        public RegisterUserDTOValidator()
         {
             RuleFor(u => u.Username)
                 .NotEmpty().WithMessage("Username is required.")
