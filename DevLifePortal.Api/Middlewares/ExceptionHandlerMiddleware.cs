@@ -1,4 +1,5 @@
 ﻿using DevLifePortal.Application.Exceptions;
+using FluentValidation;
 using System.Net;
 using System.Text.Json;
 
@@ -43,6 +44,19 @@ namespace DevLifePortal.Api.Middlewares
 
                 case NotFoundException:
                     httpStatusCode = HttpStatusCode.NotFound;
+                    break;
+
+                case ValidationException validationException:
+                    httpStatusCode = HttpStatusCode.BadRequest;
+                    result = JsonSerializer.Serialize(new
+                    {
+                        error = "Validation failed",
+                        details = validationException.Errors.Select(e => new
+                        {
+                            field = e.PropertyName,
+                            message = e.ErrorMessage
+                        })
+                    });
                     break;
 
                 default:
