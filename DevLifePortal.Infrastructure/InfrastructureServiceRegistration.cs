@@ -62,6 +62,7 @@ namespace DevLifePortal.Infrastructure
             services.AddScoped<IDevDatingProfileRepository, DevDatingProfileRepository>();
             services.AddScoped<IDevDatingFakeProfileRepository, DevDatingFakeProfileRepository>();
             services.AddScoped<IDevDateSwipeRepository, DevDateSwipeRepository>();
+            services.AddScoped<ICodeCasinoChallengeRepository, CodeCasinoChallengeRepository>();
 
             services.AddHttpClient<IGithubService, GithubService>();
 
