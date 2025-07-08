@@ -7,6 +7,6 @@ namespace DevLifePortal.Application.Contracts.Application
     {
         Task<UserDTO?> GetUserByUsernameAsync(string username);
         Task<UserDTO?> GetUserByIdAsync(int id);
-        Task<UserDTO> RegisterUser(User user);
+        Task<UserDTO> RegisterUser(RegisterUserDTO user);
     }
 }
