@@ -90,10 +90,10 @@ namespace DevLifePortal.Application.Services
                 .ToList();
         }
 
-        public async Task<string> ChatWithFakeProfileAi(int userId, Guid fakeProfileId, string userText)
+        public async Task<string> ChatWithFakeProfileAi(DevDatingTextMatchDTO textMatchDTO, int userId)
         {
             var userProfile = await _profileRepository.GetAsync(userId);
-            var fakeProfile = await _fakeProfileRepository.GetByIdAsync(fakeProfileId);
+            var fakeProfile = await _fakeProfileRepository.GetByIdAsync(textMatchDTO.FakeProfileId);
 
             if (fakeProfile == null)
             {
@@ -106,7 +106,7 @@ namespace DevLifePortal.Application.Services
                 @$"lets play out fake scenario, we are on online dev dating website and we matched,
                    im {userGender}, my bio is {userProfile.Bio}, you are {fakeProfile.Gender},
                    your bio is {fakeProfile.Bio}, your teck stack is {fakeProfile.TechStack}
-                   and i texted you this {userText}");
+                   and i texted you this {textMatchDTO.UserText}");
 
             return response;
         }

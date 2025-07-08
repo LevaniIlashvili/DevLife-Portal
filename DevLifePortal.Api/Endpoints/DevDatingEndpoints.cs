@@ -102,8 +102,7 @@ namespace DevLifePortal.Api.Endpoints
             devDatingGroup.MapPost("/textmatch", async (
                 IDevDatingService devDatingService,
                 HttpContext context,
-                [FromQuery] Guid fakeProfileId,
-                [FromBody] string userText) =>
+                [FromBody] DevDatingTextMatchDTO textMatchDTO) =>
             {
                 var userId = context.Session.GetString("UserId");
 
@@ -112,7 +111,7 @@ namespace DevLifePortal.Api.Endpoints
                     return Results.Unauthorized();
                 }
 
-                var response = await devDatingService.ChatWithFakeProfileAi(int.Parse(userId), fakeProfileId, userText);
+                var response = await devDatingService.ChatWithFakeProfileAi(textMatchDTO, int.Parse(userId));
 
                 return Results.Ok(response);
             })

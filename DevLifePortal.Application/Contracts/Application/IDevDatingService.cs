@@ -10,6 +10,6 @@ namespace DevLifePortal.Application.Contracts.Application
         Task<DevDatingFakeProfile?> GetPotentialMatch(int userId);
         Task SwipeAsync(DevDatingSwipeAction swipeAction);
         Task<List<DevDatingFakeProfile>> GetMatchesAsync(int userId);
-        Task<string> ChatWithFakeProfileAi(int userId, Guid fakeProfileId, string userText);
+        Task<string> ChatWithFakeProfileAi(DevDatingTextMatchDTO textMatchDTO, int userId);
     }
 }
