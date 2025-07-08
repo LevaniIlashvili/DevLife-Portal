@@ -2,6 +2,7 @@
 using DevLifePortal.Application.Contracts.Application;
 using DevLifePortal.Application.Contracts.Infrastructure;
 using DevLifePortal.Application.DTOs;
+using DevLifePortal.Application.Validators;
 using DevLifePortal.Domain.Entities;
 
 namespace DevLifePortal.Application.Services
@@ -75,7 +76,7 @@ namespace DevLifePortal.Application.Services
             return compatibleProfiles[index];
         }
 
-        public async Task SwipeAsync(DevDatingSwipeAction swipeAction)
+        public async Task SwipeAsync(DevDatingSwipeActionDTO swipeActionDTO, int userId)
         {
             await _swipeRepository.SaveSwipeAsync(swipeAction);
         }
