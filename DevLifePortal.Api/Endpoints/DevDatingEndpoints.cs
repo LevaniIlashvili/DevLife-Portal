@@ -66,7 +66,7 @@ namespace DevLifePortal.Api.Endpoints
             devDatingGroup.MapPost("/swipe", async (
                 IDevDatingService devDatingService,
                 HttpContext context,
-                [FromBody] DevDatingSwipeAction swipeAction) =>
+                [FromBody] DevDatingSwipeActionDTO swipeActionDTO) =>
             {
                 var userId = context.Session.GetString("UserId");
 
@@ -75,8 +75,7 @@ namespace DevLifePortal.Api.Endpoints
                     return Results.Unauthorized();
                 }
 
-                swipeAction.UserId = int.Parse(userId);
-                await devDatingService.SwipeAsync(swipeAction);
+                await devDatingService.SwipeAsync(swipeActionDTO, int.Parse(userId));
 
                 return Results.Ok();
             })
