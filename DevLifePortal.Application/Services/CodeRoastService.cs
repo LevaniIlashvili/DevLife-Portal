@@ -1,4 +1,5 @@
 ﻿using DevLifePortal.Application.Contracts.Application;
+using DevLifePortal.Application.DTOs;
 
 namespace DevLifePortal.Application.Services
 {
@@ -18,7 +19,7 @@ namespace DevLifePortal.Application.Services
             return problem;
         }
 
-        public async Task<string> RoastCode(string problemTitle, string solution)
+        public async Task<string> RoastCode(CodeRoastSolutionDTO solutionDTO)
         {
             var roast = await _openAiService.AskAsync(
                 $@"im gonna give you leetcode problem and my solution, you review my code and 
@@ -27,8 +28,8 @@ namespace DevLifePortal.Application.Services
                 own words, here is the example when solution is bad როუსტინგი თუ ცუდია: ეს კოდი 
                 ისე ცუდია, კომპილატორმა დეპრესია დაიწყო, here is example when solution is good 
                 შექება თუ კარგია: ბრავო! ამ კოდს ჩემი ბებიაც დაწერდა, მაგრამ მაინც კარგია, 
-                here is the problem title {problemTitle}, 
-                here is the soluton: {solution}, return only roast or praise nothing else");
+                here is the problem title {solutionDTO.ProblemName}, 
+                here is the soluton: {solutionDTO.Solution}, return only roast or praise nothing else");
 
             return roast;
         }
