@@ -22,7 +22,8 @@ namespace DevLifePortal.Api.Endpoints
                 var profile = await codeCasinoService.GetProfile(int.Parse(userId));
 
                 return Results.Ok(profile);
-            });
+            })
+            .WithTags("Code Casino");
 
             codeCasinoGroup.MapGet("/challenge", async (ICodeCasinoService codeCasinoService, HttpContext context) =>
             {
@@ -35,7 +36,8 @@ namespace DevLifePortal.Api.Endpoints
 
                 var codeSnippets = await codeCasinoService.GetSnippets(username);
                 return Results.Ok(codeSnippets);
-            });
+            })
+            .WithTags("Code Casino");
 
             codeCasinoGroup.MapPost("/challenge", async (ICodeCasinoService codeCasinoService, HttpContext context, [FromBody] CodeCasinoAnswerChallengeDTO answerChallengeDTO) =>
             {
@@ -49,7 +51,8 @@ namespace DevLifePortal.Api.Endpoints
                 await codeCasinoService.AnswerChallenge(int.Parse(userId), answerChallengeDTO.ChoseCorrect, answerChallengeDTO.PointsWagered);
 
                 return Results.Ok();
-            });
+            })
+            .WithTags("Code Casino");
         }
     }
 }

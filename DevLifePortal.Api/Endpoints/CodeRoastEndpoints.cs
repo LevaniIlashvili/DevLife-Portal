@@ -14,13 +14,15 @@ namespace DevLifePortal.Api.Endpoints
             {
                 var problem = await codeRoastService.GetProblem(difficulty);
                 return Results.Ok(problem);
-            });
+            })
+            .WithTags("Code Roast");
 
             codeRoastGroup.MapPost("/problem", async (ICodeRoastService codeRoastService, [FromBody] CodeRoastSolutionDTO solutionDTO) =>
             {
                 var roast = await codeRoastService.RoastCode(solutionDTO.ProblemName, solutionDTO.Solution);
                 return Results.Ok(roast);
-            });
+            })
+            .WithTags("Code Roast");
         }
     }
 }

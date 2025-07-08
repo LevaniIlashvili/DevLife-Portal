@@ -13,7 +13,8 @@ namespace DevLifePortal.Api.Endpoints
             {
                 var excuse = excuseGeneratorService.Generate(category, type);
                 return Results.Ok(excuse);
-            });
+            })
+            .WithTags("Excuse Generator");
 
             excusesGroup.MapPost("/favorite", async (
                 Excuse excuse,
@@ -29,7 +30,8 @@ namespace DevLifePortal.Api.Endpoints
 
                 await excuseGeneratorService.SaveFavoriteAsync(userId, excuse);
                 return Results.Ok();
-            });
+            })
+            .WithTags("Excuse Generator");
 
             excusesGroup.MapGet("/favorites", async (
                 IExcuseGeneratorService excuseGeneratorService,
@@ -44,7 +46,8 @@ namespace DevLifePortal.Api.Endpoints
 
                 var favorites = await excuseGeneratorService.GetFavoritesAsync(userId);
                 return Results.Ok(favorites);
-            });
+            })
+            .WithTags("Excuse Generator");
         }
     }
 }

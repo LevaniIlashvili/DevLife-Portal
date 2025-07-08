@@ -24,7 +24,8 @@ namespace DevLifePortal.Api.Endpoints
                 var profile = await devDatingService.GetProfileAsync(int.Parse(userId));
 
                 return Results.Ok(profile);
-            });
+            })
+            .WithTags("Dev Dating");
 
             devDatingGroup.MapPost("/profile", async (
                 DevDatingProfile profile,
@@ -43,7 +44,8 @@ namespace DevLifePortal.Api.Endpoints
                 var addedProfile = await devDatingService.CreateProfileAsync(profile);
 
                 return Results.Created($"/devdating/profile", addedProfile);
-            });
+            })
+            .WithTags("Dev Dating");
 
             devDatingGroup.MapGet("/potentialmatch", async (
                 IDevDatingService devDatingService,
@@ -59,7 +61,8 @@ namespace DevLifePortal.Api.Endpoints
                 var match = await devDatingService.GetPotentialMatch(int.Parse(userId));
 
                 return Results.Ok(match);
-            });
+            })
+            .WithTags("Dev Dating");
 
             devDatingGroup.MapPost("/swipe", async (
                 IDevDatingService devDatingService,
@@ -77,7 +80,8 @@ namespace DevLifePortal.Api.Endpoints
                 await devDatingService.SwipeAsync(swipeAction);
 
                 return Results.Ok();
-            });
+            })
+            .WithTags("Dev Dating");
 
             devDatingGroup.MapGet("/matches", async (
                 IDevDatingService devDatingService,
@@ -93,7 +97,8 @@ namespace DevLifePortal.Api.Endpoints
                 var matches = await devDatingService.GetMatchesAsync(int.Parse(userId));
 
                 return Results.Ok(matches);
-            });
+            })
+            .WithTags("Dev Dating");
 
             devDatingGroup.MapPost("/textmatch", async (
                 IDevDatingService devDatingService,
@@ -111,7 +116,8 @@ namespace DevLifePortal.Api.Endpoints
                 var response = await devDatingService.ChatWithFakeProfileAi(int.Parse(userId), fakeProfileId, userText);
 
                 return Results.Ok(response);
-            });
+            })
+            .WithTags("Dev Dating");
         }
     }
 }
