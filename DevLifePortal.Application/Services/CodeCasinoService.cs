@@ -2,6 +2,7 @@
 using DevLifePortal.Application.Contracts.Infrastructure;
 using DevLifePortal.Application.DTOs;
 using DevLifePortal.Domain.Entities;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 
 namespace DevLifePortal.Application.Services
@@ -9,17 +10,23 @@ namespace DevLifePortal.Application.Services
     public class CodeCasinoService : ICodeCasinoService
     {
         private readonly ICodeCasinoProfileRepository _codeCasinoProfileRepository;
+        private readonly ICodeCasinoChallengeRepository _codeCasinoChallengeRepository;
         private readonly IUserRepository _userRepository;
         private readonly IOpenAiService _openAiService;
+        private readonly ILogger<CodeCasinoService> _logger;
 
         public CodeCasinoService(
             ICodeCasinoProfileRepository codeCasinoProfileRepository,
+            ICodeCasinoChallengeRepository codeCasinoChallengeRepository,
             IUserRepository userRepository,
-            IOpenAiService openAiService)
+            IOpenAiService openAiService,
+            ILogger<CodeCasinoService> logger)
         {
             _codeCasinoProfileRepository = codeCasinoProfileRepository;
+            _codeCasinoChallengeRepository = codeCasinoChallengeRepository;
             _userRepository = userRepository;
             _openAiService = openAiService;
+            _logger = logger;
         }
 
         public async Task CreateProfile(int userId)
@@ -44,11 +51,21 @@ namespace DevLifePortal.Application.Services
         {
             var user = await _userRepository.GetByUsernameAsync(username);
 
-            var response = await _openAiService.AskAsync(@$"Give me two similar {user.TechStack} code snippets: one correct and one incorrect. The format should be an object with two properties: correctCode and incorrectCode in JSON format. Do not write anything else, do not include markdown code block markers");
+            CodeCasinoChallenge snippetsResponse;
+            try
+            {
+                var response = await _openAiService.AskAsync(@$"Give me two similar {user.TechStack} code snippets: one correct and one incorrect. The format should be an object with two properties: correctCode and incorrectCode in JSON format. Do not write anything else, do not include markdown code block markers");
 
-            var snippetsResponse = JsonConvert.DeserializeObject<CodeCasinoChallenge>(response);
-
-            snippetsResponse.TechStack = user.TechStack;
+                snippetsResponse = JsonConvert.DeserializeObject<CodeCasinoChallenge>(response);
+                snippetsResponse.TechStack = user.TechStack;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error occurred while getting code casino challenge from OpenAI API");
+                var snippets = await _codeCasinoChallengeRepository.GetAllAsync();
+                var rand = new Random();
+                snippetsResponse = snippets[rand.Next(0, snippets.Count)];
+            }
 
             return snippetsResponse;
         }
