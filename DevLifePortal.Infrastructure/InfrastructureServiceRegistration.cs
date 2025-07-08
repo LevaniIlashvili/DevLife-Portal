@@ -9,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using MongoDB.Driver;
+using static DevLifePortal.Infrastructure.Mongo.Seeders;
 
 namespace DevLifePortal.Infrastructure
 {
@@ -45,7 +46,6 @@ namespace DevLifePortal.Infrastructure
                 return db.GetCollection<DevDatingSwipeAction>("swipe_actions");
             });
 
-            services.AddTransient<StaticDatingProfileSeeder>();
             services.AddSingleton(serviceProvider =>
             {
                 var client = serviceProvider.GetRequiredService<IMongoClient>();
@@ -53,6 +53,8 @@ namespace DevLifePortal.Infrastructure
                 return db.GetCollection<CodeCasinoChallenge>("code_casino_challenges");
             });
 
+            services.AddTransient<DevDatingFakeProfileSeeder>();
+            services.AddTransient<CodeCasinoChallengeSeeder>();
 
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<ICodeCasinoProfileRepository, CodeCasinoProfileRepository>();
