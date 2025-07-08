@@ -1,5 +1,7 @@
 ﻿using DevLifePortal.Application.Contracts.Application;
 using DevLifePortal.Application.DTOs;
+using DevLifePortal.Application.Validators;
+using FluentValidation;
 
 namespace DevLifePortal.Application.Services
 {
@@ -21,6 +23,14 @@ namespace DevLifePortal.Application.Services
 
         public async Task<string> RoastCode(CodeRoastSolutionDTO solutionDTO)
         {
+            var validator = new CodeRoastSolutionDTOValidator();
+            var result = await validator.ValidateAsync(solutionDTO);
+
+            if (!result.IsValid)
+            {
+                throw new ValidationException(result.Errors);
+            }
+
             var roast = await _openAiService.AskAsync(
                 $@"im gonna give you leetcode problem and my solution, you review my code and 
                 praise or roast me in georgian based on the correctness of code, you can get 
