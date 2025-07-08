@@ -19,7 +19,7 @@ namespace DevLifePortal.Api.Endpoints
 
             codeRoastGroup.MapPost("/problem", async (ICodeRoastService codeRoastService, [FromBody] CodeRoastSolutionDTO solutionDTO) =>
             {
-                var roast = await codeRoastService.RoastCode(solutionDTO.ProblemName, solutionDTO.Solution);
+                var roast = await codeRoastService.RoastCode(solutionDTO);
                 return Results.Ok(roast);
             })
             .WithTags("Code Roast");
