@@ -13,6 +13,8 @@ namespace DevLifePortal.Application.Profiles
 
             CreateMap<DevDatingProfile, DevDatingAddProfileDTO>().ReverseMap();
             CreateMap<DevDatingProfileDTO, DevDatingProfile>().ReverseMap();
+
+            CreateMap<DevDatingSwipeAction, DevDatingSwipeActionDTO>().ReverseMap();
         }
     }
 }
