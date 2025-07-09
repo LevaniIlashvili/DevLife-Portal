@@ -27,29 +27,34 @@ namespace DevLifePortal.Infrastructure
 
             services.AddSingleton(serviceProvider =>
             {
-                var client = serviceProvider.GetRequiredService<IMongoClient>();
-                var db = client.GetDatabase("DevLife");
-                return db.GetCollection<DevDatingProfile>("dating_profiles");
-            });
+                var connectionString = configuration.GetConnectionString("MongoDB");
+                var mongoUrl = new MongoUrl(connectionString);
+                var databaseName = mongoUrl.DatabaseName;
 
-            services.AddSingleton(serviceProvider =>
-            {
                 var client = serviceProvider.GetRequiredService<IMongoClient>();
-                var db = client.GetDatabase("DevLife");
+                var db = client.GetDatabase(databaseName);
                 return db.GetCollection<DevDatingFakeProfile>("fake_profiles");
             });
 
             services.AddSingleton(serviceProvider =>
             {
+                var connectionString = configuration.GetConnectionString("MongoDB");
+                var mongoUrl = new MongoUrl(connectionString);
+                var databaseName = mongoUrl.DatabaseName;
+
                 var client = serviceProvider.GetRequiredService<IMongoClient>();
-                var db = client.GetDatabase("DevLife");
+                var db = client.GetDatabase(databaseName);
                 return db.GetCollection<DevDatingSwipeAction>("swipe_actions");
             });
 
             services.AddSingleton(serviceProvider =>
             {
+                var connectionString = configuration.GetConnectionString("MongoDB");
+                var mongoUrl = new MongoUrl(connectionString);
+                var databaseName = mongoUrl.DatabaseName;
+
                 var client = serviceProvider.GetRequiredService<IMongoClient>();
-                var db = client.GetDatabase("DevLife");
+                var db = client.GetDatabase(databaseName);
                 return db.GetCollection<CodeCasinoChallenge>("code_casino_challenges");
             });
 
