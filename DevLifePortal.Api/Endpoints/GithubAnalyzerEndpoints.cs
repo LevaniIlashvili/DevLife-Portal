@@ -6,7 +6,9 @@ namespace DevLifePortal.Api.Endpoints
     {
         public static IEndpointRouteBuilder MapGithubAnalyzerEndpoints(this IEndpointRouteBuilder app)
         {
-            app.MapGet("/github/login", (HttpContext http, IConfiguration config) =>
+            var githubGroup = app.MapGroup("/github").WithTags("Github Analyzer");
+
+            githubGroup.MapGet("/login", (HttpContext http, IConfiguration config) =>
             {
                 var clientId = config["GitHubOAuth:ClientId"];
                 var callbackUrl = config["GitHubOAuth:CallbackUrl"];
@@ -16,10 +18,9 @@ namespace DevLifePortal.Api.Endpoints
 
                 var githubUrl = $"https://github.com/login/oauth/authorize?client_id={clientId}&redirect_uri={callbackUrl}&state={state}&scope=read:user%20repo";
                 return Results.Redirect(githubUrl);
-            })
-            .WithTags("Github Analyzer");
+            });
 
-            app.MapGet("/github/callback", async (string code, string state, HttpContext http, IGithubService githubService) =>
+            githubGroup.MapGet("/callback", async (string code, string state, HttpContext http, IGithubService githubService) =>
             {
                 var expectedState = http.Session.GetString("OAuthState");
                 if (state != expectedState)
@@ -31,10 +32,9 @@ namespace DevLifePortal.Api.Endpoints
                 http.Session.SetString("GitHubAccessToken", accessToken);
 
                 return Results.Ok(new { username, accessToken });
-            })
-            .WithTags("Github Analyzer");
+            });
 
-            app.MapGet("/github/repos", async (HttpContext http, IGithubService gitHubService) =>
+            githubGroup.MapGet("/repos", async (HttpContext http, IGithubService gitHubService) =>
             {
                 var accessToken = http.Session.GetString("GitHubAccessToken");
                 if (string.IsNullOrEmpty(accessToken))
@@ -42,10 +42,9 @@ namespace DevLifePortal.Api.Endpoints
 
                 var repos = await gitHubService.GetUserRepositoriesAsync(accessToken);
                 return Results.Ok(repos);
-            })
-            .WithTags("Github Analyzer");
+            });
 
-            app.MapGet("/github/analyze", async (
+            githubGroup.MapGet("/analyze", async (
                 HttpContext http,
                 IGithubService githubService,
                 string repoFullName) =>
@@ -57,8 +56,7 @@ namespace DevLifePortal.Api.Endpoints
 
                 var analysis = await githubService.AnalyzeRepositoryAsync(accessToken, repoFullName);
                 return Results.Ok(analysis);
-            })
-            .WithTags("Github Analyzer");
+            });
 
             return app;
         }

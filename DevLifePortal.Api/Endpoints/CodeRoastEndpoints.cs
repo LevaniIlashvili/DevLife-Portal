@@ -8,21 +8,19 @@ namespace DevLifePortal.Api.Endpoints
     {
         public static void MapCodeRoastEndpoints(this IEndpointRouteBuilder endpoints)
         {
-            var codeRoastGroup = endpoints.MapGroup("/coderoast");
+            var codeRoastGroup = endpoints.MapGroup("/coderoast").WithTags("Code Roast");
 
             codeRoastGroup.MapGet("/problem", async (ICodeRoastService codeRoastService, [FromQuery] string difficulty = "easy") =>
             {
                 var problem = await codeRoastService.GetProblem(difficulty);
                 return Results.Ok(problem);
-            })
-            .WithTags("Code Roast");
+            });
 
             codeRoastGroup.MapPost("/problem", async (ICodeRoastService codeRoastService, [FromBody] CodeRoastSolutionDTO solutionDTO) =>
             {
                 var roast = await codeRoastService.RoastCode(solutionDTO);
                 return Results.Ok(roast);
-            })
-            .WithTags("Code Roast");
+            });
         }
     }
 }

@@ -1,6 +1,5 @@
 ﻿using DevLifePortal.Application.Contracts.Application;
 using DevLifePortal.Application.DTOs;
-using DevLifePortal.Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DevLifePortal.Api.Endpoints
@@ -9,10 +8,10 @@ namespace DevLifePortal.Api.Endpoints
     {
         public static void MapDevDatingEndpoints(this IEndpointRouteBuilder app)
         {
-            var devDatingGroup = app.MapGroup("/devdating");
+            var devDatingGroup = app.MapGroup("/devdating").WithTags("Dev Dating");
 
             devDatingGroup.MapGet("/profile", async (
-                IDevDatingService devDatingService, 
+                IDevDatingService devDatingService,
                 HttpContext context) =>
             {
                 var userId = context.Session.GetString("UserId");
@@ -25,8 +24,7 @@ namespace DevLifePortal.Api.Endpoints
                 var profile = await devDatingService.GetProfileAsync(int.Parse(userId));
 
                 return Results.Ok(profile);
-            })
-            .WithTags("Dev Dating");
+            });
 
             devDatingGroup.MapPost("/profile", async (
                 DevDatingAddProfileDTO profile,
@@ -43,8 +41,7 @@ namespace DevLifePortal.Api.Endpoints
                 var addedProfile = await devDatingService.CreateProfileAsync(profile, int.Parse(userId));
 
                 return Results.Created($"/devdating/profile", addedProfile);
-            })
-            .WithTags("Dev Dating");
+            });
 
             devDatingGroup.MapGet("/potentialmatch", async (
                 IDevDatingService devDatingService,
@@ -60,8 +57,7 @@ namespace DevLifePortal.Api.Endpoints
                 var match = await devDatingService.GetPotentialMatch(int.Parse(userId));
 
                 return Results.Ok(match);
-            })
-            .WithTags("Dev Dating");
+            });
 
             devDatingGroup.MapPost("/swipe", async (
                 IDevDatingService devDatingService,
@@ -78,8 +74,7 @@ namespace DevLifePortal.Api.Endpoints
                 await devDatingService.SwipeAsync(swipeActionDTO, int.Parse(userId));
 
                 return Results.Ok();
-            })
-            .WithTags("Dev Dating");
+            });
 
             devDatingGroup.MapGet("/matches", async (
                 IDevDatingService devDatingService,
@@ -95,8 +90,7 @@ namespace DevLifePortal.Api.Endpoints
                 var matches = await devDatingService.GetMatchesAsync(int.Parse(userId));
 
                 return Results.Ok(matches);
-            })
-            .WithTags("Dev Dating");
+            });
 
             devDatingGroup.MapPost("/textmatch", async (
                 IDevDatingService devDatingService,
@@ -113,8 +107,7 @@ namespace DevLifePortal.Api.Endpoints
                 var response = await devDatingService.ChatWithFakeProfileAi(textMatchDTO, int.Parse(userId));
 
                 return Results.Ok(response);
-            })
-            .WithTags("Dev Dating");
+            });
         }
     }
 }

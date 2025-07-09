@@ -8,11 +8,11 @@ namespace DevLifePortal.Api.Endpoints
     {
         public static void MapExcuseEndpoints(this IEndpointRouteBuilder app)
         {
-            var excusesGroup = app.MapGroup("/excuses");
+            var excusesGroup = app.MapGroup("/excuses").WithTags("Excuse Generator");
 
             excusesGroup.MapGet("/generate", (
-                IExcuseGeneratorService excuseGeneratorService, 
-                string category, 
+                IExcuseGeneratorService excuseGeneratorService,
+                string category,
                 string type) =>
             {
                 if (!Enum.TryParse<ExcuseType>(type, true, out var parsedType))
@@ -22,8 +22,7 @@ namespace DevLifePortal.Api.Endpoints
 
                 var excuse = excuseGeneratorService.Generate(category, parsedType);
                 return Results.Ok(excuse);
-            })
-            .WithTags("Excuse Generator");
+            });
 
             excusesGroup.MapPost("/favorite", async (
                 Excuse excuse,
@@ -39,8 +38,7 @@ namespace DevLifePortal.Api.Endpoints
 
                 await excuseGeneratorService.SaveFavoriteAsync(userId, excuse);
                 return Results.Ok();
-            })
-            .WithTags("Excuse Generator");
+            });
 
             excusesGroup.MapGet("/favorites", async (
                 IExcuseGeneratorService excuseGeneratorService,
@@ -55,8 +53,7 @@ namespace DevLifePortal.Api.Endpoints
 
                 var favorites = await excuseGeneratorService.GetFavoritesAsync(userId);
                 return Results.Ok(favorites);
-            })
-            .WithTags("Excuse Generator");
+            });
         }
     }
 }
