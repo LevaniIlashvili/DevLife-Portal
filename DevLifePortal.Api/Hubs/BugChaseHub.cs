@@ -14,6 +14,9 @@ namespace DevLifePortal.Api.Hubs
 
         public async Task SendScore(int score)
         {
+
+            var topProfilesBeforeUpdating = await _bugChaseService.GetTopProfiles();
+
             var httpContext = Context.GetHttpContext();
 
             var userId = httpContext.Session.GetString("UserId");
@@ -21,7 +24,15 @@ namespace DevLifePortal.Api.Hubs
             await _bugChaseService.UpdateProfileScore(int.Parse(userId), score);
 
             var topProfiles = await _bugChaseService.GetTopProfiles();
-            await Clients.All.SendAsync("LeaderboardUpdated", topProfiles);
+
+            var areEqual = topProfilesBeforeUpdating
+                .Select(p => (p.Id, p.MaxScore))
+                .SequenceEqual(topProfiles.Select(p => (p.Id, p.MaxScore)));
+
+            if (!areEqual)
+            {
+                await Clients.All.SendAsync("LeaderboardUpdated", topProfiles);
+            }
         }
 
         public async override Task OnConnectedAsync()
