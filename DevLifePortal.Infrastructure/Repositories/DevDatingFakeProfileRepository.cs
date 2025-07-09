@@ -1,6 +1,5 @@
 ﻿using DevLifePortal.Application.Contracts.Infrastructure;
 using DevLifePortal.Domain.Entities;
-using Microsoft.Extensions.Configuration;
 using MongoDB.Driver;
 
 namespace DevLifePortal.Infrastructure.Repositories
@@ -9,11 +8,9 @@ namespace DevLifePortal.Infrastructure.Repositories
     {
         private readonly IMongoCollection<DevDatingFakeProfile> _profileCollection;
 
-        public DevDatingFakeProfileRepository(IMongoClient mongoClient, IConfiguration configuration)
+        public DevDatingFakeProfileRepository(IMongoCollection<DevDatingFakeProfile> collection)
         {
-            var dbName = configuration.GetConnectionString("MongoDb");
-            var db = mongoClient.GetDatabase("DevLife");
-            _profileCollection = db.GetCollection<DevDatingFakeProfile>("fake_profiles");
+            _profileCollection = collection;
         }
 
         public async Task<List<DevDatingFakeProfile>> GetAllAsync()

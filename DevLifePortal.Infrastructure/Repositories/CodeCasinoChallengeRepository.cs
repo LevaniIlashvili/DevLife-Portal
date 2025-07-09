@@ -1,6 +1,5 @@
 ﻿using DevLifePortal.Application.Contracts.Infrastructure;
 using DevLifePortal.Domain.Entities;
-using Microsoft.Extensions.Configuration;
 using MongoDB.Driver;
 
 namespace DevLifePortal.Infrastructure.Repositories
@@ -9,11 +8,9 @@ namespace DevLifePortal.Infrastructure.Repositories
     {
         private readonly IMongoCollection<CodeCasinoChallenge> _challengeCollection;
 
-        public CodeCasinoChallengeRepository(IMongoClient mongoClient, IConfiguration configuration)
+        public CodeCasinoChallengeRepository(IMongoCollection<CodeCasinoChallenge> collection)
         {
-            var dbName = configuration.GetConnectionString("MongoDb");
-            var db = mongoClient.GetDatabase("DevLife");
-            _challengeCollection = db.GetCollection<CodeCasinoChallenge>("code_casino_challenges");
+            _challengeCollection = collection;
         }
 
         public async Task<List<CodeCasinoChallenge>> GetAllAsync()

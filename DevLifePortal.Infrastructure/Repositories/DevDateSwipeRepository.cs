@@ -1,6 +1,5 @@
 ﻿using DevLifePortal.Application.Contracts.Infrastructure;
 using DevLifePortal.Domain.Entities;
-using Microsoft.Extensions.Configuration;
 using MongoDB.Driver;
 
 namespace DevLifePortal.Infrastructure.Repositories
@@ -9,11 +8,9 @@ namespace DevLifePortal.Infrastructure.Repositories
     {
         private readonly IMongoCollection<DevDatingSwipeAction> _swipeCollection;
 
-        public DevDateSwipeRepository(IMongoClient mongoClient, IConfiguration configuration)
+        public DevDateSwipeRepository(IMongoCollection<DevDatingSwipeAction> collection)
         {
-            var dbName = configuration.GetConnectionString("MongoDb");
-            var db = mongoClient.GetDatabase("DevLife");
-            _swipeCollection = db.GetCollection<DevDatingSwipeAction>("swipe_actions");
+            _swipeCollection = collection;
         }
 
         public async Task SaveSwipeAsync(DevDatingSwipeAction swipe)
