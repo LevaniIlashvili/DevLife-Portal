@@ -1,5 +1,6 @@
 ﻿using DevLifePortal.Application.Contracts.Application;
 using DevLifePortal.Domain.Entities;
+using DevLifePortal.Domain.Enums;
 using Microsoft.Extensions.Caching.Distributed;
 using System.Text.Json;
 
@@ -36,10 +37,10 @@ namespace DevLifePortal.Application.Services
             _cache = cache;            
         }
 
-        public Excuse Generate(string category, string type)
+        public Excuse Generate(string category, ExcuseType type)
         {
             var rand = new Random();
-            var text = Templates.TryGetValue(type, out var list)
+            var text = Templates.TryGetValue(type.ToString(), out var list)
                 ? list[rand.Next(list.Length)]
                 : "მიუხედავად ყველაფრისა, უბრალოდ ვერ მოვალ.";
 
@@ -47,7 +48,7 @@ namespace DevLifePortal.Application.Services
             {
                 Id = Guid.NewGuid(),
                 Category = category,
-                Type = type,
+                Type = type.ToString(),
                 Text = text
             };
 
