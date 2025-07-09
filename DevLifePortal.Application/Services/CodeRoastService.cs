@@ -35,9 +35,9 @@ namespace DevLifePortal.Application.Services
                 $@"im gonna give you leetcode problem and my solution, you review my code and 
                 praise or roast me in georgian based on the correctness of code, you can get 
                 insipartion from the example im gonna give but dont repeat it, come up with your 
-                own words, here is the example when solution is bad როუსტინგი თუ ცუდია: ეს კოდი 
-                ისე ცუდია, კომპილატორმა დეპრესია დაიწყო, here is example when solution is good 
-                შექება თუ კარგია: ბრავო! ამ კოდს ჩემი ბებიაც დაწერდა, მაგრამ მაინც კარგია, 
+                own words, here is the example when solution is bad: ეს კოდი 
+                ისე ცუდია, კომპილატორმა დეპრესია დაიწყო, here is example when solution is good: 
+                ბრავო! ამ კოდს ჩემი ბებიაც დაწერდა, მაგრამ მაინც კარგია, 
                 here is the problem title {solutionDTO.ProblemName}, 
                 here is the soluton: {solutionDTO.Solution}, return only roast or praise nothing else");
 
