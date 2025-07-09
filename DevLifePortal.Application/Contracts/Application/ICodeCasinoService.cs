@@ -8,7 +8,7 @@ namespace DevLifePortal.Application.Contracts.Application
         Task CreateProfile(int userId);
         Task<CodeCasinoProfileDTO> GetProfile(int userId);
         Task<CodeCasinoChallenge> GetSnippets(string username);
-        Task AnswerChallenge(int userId, bool choseCorrect, int pointsWagered);
+        Task AnswerChallenge(int userId, CodeCasinoAnswerChallengeDTO answerChallengeDTO);
 
     }
 }

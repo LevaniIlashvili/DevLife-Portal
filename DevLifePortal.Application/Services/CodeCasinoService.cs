@@ -70,21 +70,21 @@ namespace DevLifePortal.Application.Services
             return snippetsResponse;
         }
 
-        public async Task AnswerChallenge(int userId, bool choseCorrect, int pointsWagered)
+        public async Task AnswerChallenge(int userId, CodeCasinoAnswerChallengeDTO answerChallengeDTO)
         {
             var profile = await _codeCasinoProfileRepository.GetProfile(userId);
             
-            if (profile.Points < pointsWagered)
+            if (profile.Points < answerChallengeDTO.PointsWagered)
             {
                 throw new Exceptions.BadRequestException("You don't have enough points");
             }
 
-            if (choseCorrect)
+            if (answerChallengeDTO.ChoseCorrect)
             {
-                profile.Points += pointsWagered * 2;
+                profile.Points += answerChallengeDTO.PointsWagered * 2;
             } else
             {
-                profile.Points -= pointsWagered;
+                profile.Points -= answerChallengeDTO.PointsWagered;
             }
 
             await _codeCasinoProfileRepository.UpdateProfile(profile);

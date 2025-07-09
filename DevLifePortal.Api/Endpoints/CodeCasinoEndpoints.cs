@@ -39,7 +39,10 @@ namespace DevLifePortal.Api.Endpoints
             })
             .WithTags("Code Casino");
 
-            codeCasinoGroup.MapPost("/challenge", async (ICodeCasinoService codeCasinoService, HttpContext context, [FromBody] CodeCasinoAnswerChallengeDTO answerChallengeDTO) =>
+            codeCasinoGroup.MapPost("/challenge", async (
+                ICodeCasinoService codeCasinoService, 
+                HttpContext context, 
+                [FromBody] CodeCasinoAnswerChallengeDTO answerChallengeDTO) =>
             {
                 var userId = context.Session.GetString("UserId");
 
@@ -48,7 +51,7 @@ namespace DevLifePortal.Api.Endpoints
                     return Results.Unauthorized();
                 }
 
-                await codeCasinoService.AnswerChallenge(int.Parse(userId), answerChallengeDTO.ChoseCorrect, answerChallengeDTO.PointsWagered);
+                await codeCasinoService.AnswerChallenge(int.Parse(userId), answerChallengeDTO);
 
                 return Results.Ok();
             })
