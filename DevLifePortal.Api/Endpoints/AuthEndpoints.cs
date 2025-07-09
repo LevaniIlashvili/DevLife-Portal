@@ -6,9 +6,9 @@ using System.Security.Claims;
 
 namespace DevLifePortal.Api.Endpoints
 {
-    public static class UserEndpoints
+    public static class AuthEndpoints
     {
-        public static IEndpointRouteBuilder MapUserEndpoints(this IEndpointRouteBuilder app)
+        public static IEndpointRouteBuilder MapAuthEndpoints(this IEndpointRouteBuilder app)
         {
             var authGroup = app.MapGroup("/auth").WithTags("Auth");
 

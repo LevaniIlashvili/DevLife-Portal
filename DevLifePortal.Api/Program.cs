@@ -69,7 +69,7 @@ app.UseAuthorization();
 
 app.UseHttpsRedirection();
 
-app.MapUserEndpoints();
+app.MapAuthEndpoints();
 app.MapDashboardEndpoints();
 app.MapCodeCasinoEndpoints();
 app.MapCodeRoastEndpoints();
