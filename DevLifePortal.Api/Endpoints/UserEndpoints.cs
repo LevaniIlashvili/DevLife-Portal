@@ -10,14 +10,15 @@ namespace DevLifePortal.Api.Endpoints
     {
         public static IEndpointRouteBuilder MapUserEndpoints(this IEndpointRouteBuilder app)
         {
-            app.MapPost("/register", async (IUserService userService, RegisterUserDTO user) =>
+            var authGroup = app.MapGroup("/auth").WithTags("Auth");
+
+            authGroup.MapPost("/register", async (IUserService userService, RegisterUserDTO user) =>
             {
                 var createdUser = await userService.RegisterUser(user);
                 return Results.Created((string?)null, createdUser);
-            })
-            .WithTags("User");
+            });
 
-            app.MapPost("/login", async (HttpContext context, IUserService userService, [FromBody] string username) =>
+            authGroup.MapPost("/login", async (HttpContext context, IUserService userService, [FromBody] string username) =>
             {
                 var user = await userService.GetUserByUsernameAsync(username);
                 if (user == null)
@@ -40,26 +41,23 @@ namespace DevLifePortal.Api.Endpoints
                 await context.SignInAsync("DevLifeCookieAuth", principal);
 
                 return Results.Ok();
-            })
-            .WithTags("User"); ;
+            });
 
-            app.MapPost("/logout", async (HttpContext context) =>
+            authGroup.MapPost("/logout", async (HttpContext context) =>
             {
                 context.Session.Clear();
                 await context.SignOutAsync("DevLifeCookieAuth");
                 return Results.Ok();
-            })
-            .WithTags("User"); ;
+            });
 
-            app.MapGet("/me", async (HttpContext context, IUserService userService) =>
+            authGroup.MapGet("/me", async (HttpContext context, IUserService userService) =>
             {
                 var username = context.Session.GetString("Username");
                 var user = await userService.GetUserByUsernameAsync(username!);
 
                 return Results.Ok(user);
             })
-            .RequireAuthorization()
-            .WithTags("User"); ;
+            .RequireAuthorization();
 
             return app;
         }
