@@ -52,12 +52,17 @@ namespace DevLifePortal.Api.Endpoints
 
             authGroup.MapGet("/me", async (HttpContext context, IUserService userService) =>
             {
-                var username = context.Session.GetString("Username");
-                var user = await userService.GetUserByUsernameAsync(username!);
+                var userId = context.Session.GetString("UserId");
+
+                if (string.IsNullOrEmpty(userId))
+                {
+                    return Results.Unauthorized();
+                }
+
+                var user = await userService.GetUserByIdAsync(int.Parse(userId));
 
                 return Results.Ok(user);
-            })
-            .RequireAuthorization();
+            });
 
             return app;
         }
