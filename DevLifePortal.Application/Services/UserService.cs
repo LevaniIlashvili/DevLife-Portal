@@ -80,6 +80,11 @@ namespace DevLifePortal.Application.Services
                 mappedUser.TechStack = parsedStack.ToString();
             }
 
+            if (Enum.TryParse<ExperienceLevel>(newUser.ExperienceLevel, true, out var parsedExperienceLevel))
+            {
+                mappedUser.ExperienceLevel = parsedExperienceLevel.ToString();
+            }
+
             var user = await _userRepository.AddAsync(mappedUser);
 
             await _codeCasinoProfileRepository.CreateProfile(user.Id);
