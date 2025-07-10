@@ -21,75 +21,107 @@ namespace DevLifePortal.Infrastructure.Mongo
                 if (count > 0) return;
 
                 var challenges = new List<CodeCasinoChallenge>
-{
+                {
+                    // JavaScript
                     new()
                     {
-                        TechStack = ".NET",
-                        CorrectCode = "var result = await dbContext.Users.ToListAsync();",
-                        IncorrectCode = "var result = dbContext.Users.ToList();"
+                        TechStack = "Javascript",
+                        CorrectCode = "const total = [1, 2, 3].reduce((acc, curr) => acc + curr, 0);",
+                        IncorrectCode = "const total = [1, 2, 3].reduce(acc, curr => acc + curr, 0);"
                     },
                     new()
                     {
-                        TechStack = "JavaScript",
-                        CorrectCode = "const sum = (a, b) => a + b;",
-                        IncorrectCode = "const sum = a, b => a + b;"
+                        TechStack = "Javascript",
+                        CorrectCode = "if (typeof value === 'string') { console.log(value); }",
+                        IncorrectCode = "if (typeof value = 'string') { console.log(value); }"
                     },
                     new()
                     {
-                        TechStack = "Python",
-                        CorrectCode = "def greet():\n    print(\"Hello\")",
-                        IncorrectCode = "def greet()\n    print(\"Hello\")"
+                        TechStack = "Javascript",
+                        CorrectCode = "function greet(name) { return `Hello, ${name}`; }",
+                        IncorrectCode = "function greet(name) return `Hello, ${name}`;"
+                    },
+
+                    // TypeScript
+                    new()
+                    {
+                        TechStack = "Typescript",
+                        CorrectCode = "interface User { name: string; age: number; }",
+                        IncorrectCode = "interface User { name = string; age = number; }"
                     },
                     new()
                     {
-                        TechStack = "Java",
-                        CorrectCode = "List<String> names = new ArrayList<>();",
-                        IncorrectCode = "List<String> names = new ArrayList();"
+                        TechStack = "Typescript",
+                        CorrectCode = "let scores: number[] = [90, 80, 70];",
+                        IncorrectCode = "let scores = number[] [90, 80, 70];"
                     },
                     new()
                     {
-                        TechStack = "C++",
-                        CorrectCode = "std::vector<int> nums = {1, 2, 3};",
-                        IncorrectCode = "vector<int> nums = {1, 2, 3};"
+                        TechStack = "Typescript",
+                        CorrectCode = "function getLength(item: string | string[]): number { return item.length; }",
+                        IncorrectCode = "function getLength(item: string || string[]): number { return item.length; }"
+                    },
+
+                    // React
+                    new()
+                    {
+                        TechStack = "React",
+                        CorrectCode = "useEffect(() => { fetchData(); }, []);",
+                        IncorrectCode = "useEffect(() => fetchData(), );"
                     },
                     new()
                     {
-                        TechStack = "Ruby",
-                        CorrectCode = "puts 'Hello, world!'",
-                        IncorrectCode = "print('Hello, world!')"
+                        TechStack = "React",
+                        CorrectCode = "return <div className=\"container\">Hello</div>;",
+                        IncorrectCode = "return <div class=\"container\">Hello</div>;"
                     },
                     new()
                     {
-                        TechStack = "Go",
-                        CorrectCode = "fmt.Println(\"Hello, Go\")",
-                        IncorrectCode = "fmt.print(\"Hello, Go\")"
+                        TechStack = "React",
+                        CorrectCode = "const handleClick = () => setCount(count + 1);",
+                        IncorrectCode = "const handleClick = () => setCount = count + 1;"
+                    },
+
+                    // Angular
+                    new()
+                    {
+                        TechStack = "Angular",
+                        CorrectCode = "@Injectable({ providedIn: 'root' })",
+                        IncorrectCode = "Injectable({ providedIn: 'root' })"
                     },
                     new()
                     {
-                        TechStack = "TypeScript",
-                        CorrectCode = "let name: string = 'Alice';",
-                        IncorrectCode = "let name = string 'Alice';"
+                        TechStack = "Angular",
+                        CorrectCode = "<button (click)=\"onClick()\">Click Me</button>",
+                        IncorrectCode = "<button click=\"onClick()\">Click Me</button>"
                     },
                     new()
                     {
-                        TechStack = "Kotlin",
-                        CorrectCode = "val name: String = \"Kotlin\"",
-                        IncorrectCode = "val name = String: \"Kotlin\""
+                        TechStack = "Angular",
+                        CorrectCode = "ngOnInit(): void { this.loadData(); }",
+                        IncorrectCode = "ngOnInit() void { this.loadData(); }"
+                    },
+
+                    // Net
+                    new()
+                    {
+                        TechStack = "Net",
+                        CorrectCode = "var user = await _dbContext.Users.FirstOrDefaultAsync();",
+                        IncorrectCode = "var user = _dbContext.Users.FirstOrDefault();"
                     },
                     new()
                     {
-                        TechStack = "Rust",
-                        CorrectCode = "let x: i32 = 5;",
-                        IncorrectCode = "let x = i32: 5;"
+                        TechStack = "Net",
+                        CorrectCode = "[HttpGet(\"api/users/{id}\")]",
+                        IncorrectCode = "HttpGet(\"api/users/{id}\")"
                     },
                     new()
                     {
-                        TechStack = "Swift",
-                        CorrectCode = "let greeting = \"Hello\"",
-                        IncorrectCode = "let greeting: = \"Hello\""
+                        TechStack = "Net",
+                        CorrectCode = "public IActionResult Get() => Ok(_service.GetAll());",
+                        IncorrectCode = "public ActionResult Get() => Ok(_service.GetAll());"
                     }
                 };
-
 
                 await _collection.InsertManyAsync(challenges);
             }
