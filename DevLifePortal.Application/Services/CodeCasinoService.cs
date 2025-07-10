@@ -62,7 +62,9 @@ namespace DevLifePortal.Application.Services
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error occurred while getting code casino challenge from OpenAI API");
-                var snippets = await _codeCasinoChallengeRepository.GetAllAsync();
+                var snippets = (await _codeCasinoChallengeRepository.GetAllAsync())
+                    .Where(c => c.TechStack.Equals(user.TechStack, StringComparison.OrdinalIgnoreCase))
+                    .ToList();
                 var rand = new Random();
                 snippetsResponse = snippets[rand.Next(0, snippets.Count)];
             }
