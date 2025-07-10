@@ -27,7 +27,8 @@ namespace DevLifePortal.Application.Validators
                 .WithMessage("Tech stack must be a valid value");
 
             RuleFor(u => u.ExperienceLevel)
-                .NotEmpty().WithMessage("Experience level is required.");
+                .Must(value => Enum.TryParse<ExperienceLevel>(value, true, out _))
+                .WithMessage("Experiencel level must be a valid value");
         }
     }
 
