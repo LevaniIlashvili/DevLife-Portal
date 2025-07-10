@@ -4,6 +4,7 @@ using DevLifePortal.Application.Contracts.Infrastructure;
 using DevLifePortal.Application.DTOs;
 using DevLifePortal.Application.Validators;
 using DevLifePortal.Domain.Entities;
+using DevLifePortal.Domain.Enums;
 using FluentValidation;
 
 namespace DevLifePortal.Application.Services
@@ -71,9 +72,15 @@ namespace DevLifePortal.Application.Services
                 throw new ValidationException(result.Errors);
             }
 
-            newUser.ZodiacSign = GetZodiacSign(newUser.DateOfBirth);
+            var mappedUser = _mapper.Map<User>(newUser);
+            mappedUser.ZodiacSign = GetZodiacSign(newUser.DateOfBirth);
 
-            var user = await _userRepository.AddAsync(_mapper.Map<User>(newUser));
+            if (Enum.TryParse<TechStack>(newUser.TechStack, true, out var parsedStack))
+            {
+                mappedUser.TechStack = parsedStack.ToString();
+            }
+
+            var user = await _userRepository.AddAsync(mappedUser);
 
             await _codeCasinoProfileRepository.CreateProfile(user.Id);
 
