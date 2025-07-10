@@ -37,10 +37,15 @@ namespace DevLifePortal.Application.Services
             _cache = cache;            
         }
 
-        public Excuse Generate(string category, ExcuseType type)
+        public Excuse Generate(string category, string type)
         {
+            if (!Enum.TryParse<ExcuseType>(type, true, out var parsedType))
+            {
+                throw new Exceptions.BadRequestException("Invalid excuse type");
+            }
+
             var rand = new Random();
-            var text = Templates.TryGetValue(type.ToString(), out var list)
+            var text = Templates.TryGetValue(parsedType.ToString(), out var list)
                 ? list[rand.Next(list.Length)]
                 : "მიუხედავად ყველაფრისა, უბრალოდ ვერ მოვალ.";
 
@@ -48,7 +53,7 @@ namespace DevLifePortal.Application.Services
             {
                 Id = Guid.NewGuid(),
                 Category = category,
-                Type = type.ToString(),
+                Type = parsedType.ToString(),
                 Text = text
             };
 

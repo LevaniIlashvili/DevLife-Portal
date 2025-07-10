@@ -1,6 +1,5 @@
 ﻿using DevLifePortal.Application.Contracts.Application;
 using DevLifePortal.Domain.Entities;
-using DevLifePortal.Domain.Enums;
 
 namespace DevLifePortal.Api.Endpoints
 {
@@ -15,12 +14,7 @@ namespace DevLifePortal.Api.Endpoints
                 string category,
                 string type) =>
             {
-                if (!Enum.TryParse<ExcuseType>(type, true, out var parsedType))
-                {
-                    return Results.BadRequest(new { error = "Invalid excuse type" });
-                }
-
-                var excuse = excuseGeneratorService.Generate(category, parsedType);
+                var excuse = excuseGeneratorService.Generate(category, type);
                 return Results.Ok(excuse);
             });
 
