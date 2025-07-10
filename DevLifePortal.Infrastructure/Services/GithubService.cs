@@ -1,6 +1,7 @@
 ﻿using DevLifePortal.Application.Contracts.Infrastructure;
 using DevLifePortal.Domain.Entities;
-using Microsoft.Extensions.Configuration;
+using DevLifePortal.Infrastructure.Configuration;
+using Microsoft.Extensions.Options;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json;
@@ -10,18 +11,18 @@ namespace DevLifePortal.Infrastructure.Services
     public class GithubService : IGithubService
     {
         private readonly HttpClient _httpClient;
-        private readonly IConfiguration _config;
+        private readonly GitHubOAuthOptions _githubOAuthOptions;
 
-        public GithubService(HttpClient httpClient, IConfiguration config)
+        public GithubService(HttpClient httpClient, IOptions<GitHubOAuthOptions> githubOAuthOptions)
         {
             _httpClient = httpClient;
-            _config = config;
+            _githubOAuthOptions = githubOAuthOptions.Value;
         }
 
         public async Task<string> ExchangeCodeForAccessTokenAsync(string code)
         {
-            var clientId = _config["GitHubOAuth:ClientId"];
-            var clientSecret = _config["GitHubOAuth:ClientSecret"];
+            var clientId = _githubOAuthOptions.ClientId;
+            var clientSecret = _githubOAuthOptions.ClientSecret;
 
             var request = new HttpRequestMessage(HttpMethod.Post, "https://github.com/login/oauth/access_token");
             request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));

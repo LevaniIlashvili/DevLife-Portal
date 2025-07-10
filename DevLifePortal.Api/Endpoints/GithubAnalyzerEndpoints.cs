@@ -1,4 +1,6 @@
 ﻿using DevLifePortal.Application.Contracts.Infrastructure;
+using DevLifePortal.Infrastructure.Configuration;
+using Microsoft.Extensions.Options;
 
 namespace DevLifePortal.Api.Endpoints
 {
@@ -8,10 +10,10 @@ namespace DevLifePortal.Api.Endpoints
         {
             var githubGroup = app.MapGroup("/github").WithTags("Github Analyzer");
 
-            githubGroup.MapGet("/login", (HttpContext http, IConfiguration config) =>
+            githubGroup.MapGet("/login", (HttpContext http, IOptions<GitHubOAuthOptions> gitHubOAuthOptions) =>
             {
-                var clientId = config["GitHubOAuth:ClientId"];
-                var callbackUrl = config["GitHubOAuth:CallbackUrl"];
+                var clientId = gitHubOAuthOptions.Value.ClientId;
+                var callbackUrl = gitHubOAuthOptions.Value.CallbackUrl;
                 var state = Guid.NewGuid().ToString();
 
                 http.Session.SetString("OAuthState", state);
