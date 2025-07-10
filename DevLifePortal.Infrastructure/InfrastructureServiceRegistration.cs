@@ -2,6 +2,7 @@
 using DevLifePortal.Application.Contracts.Infrastructure;
 using DevLifePortal.Application.Services;
 using DevLifePortal.Domain.Entities;
+using DevLifePortal.Infrastructure.Configuration;
 using DevLifePortal.Infrastructure.Mongo;
 using DevLifePortal.Infrastructure.Repositories;
 using DevLifePortal.Infrastructure.Services;
@@ -17,6 +18,9 @@ namespace DevLifePortal.Infrastructure
     {
         public static IServiceCollection AddInfrastructureServices(this IServiceCollection services, IConfiguration configuration)
         {
+            services.Configure<OpenAIOptions>(configuration.GetSection("OpenAI"));
+            services.Configure<GitHubOAuthOptions>(configuration.GetSection("GitHubOAuth"));
+
             services.AddDbContext<DevLifeDbContext>(options =>
                 options.UseNpgsql(configuration.GetConnectionString("PostgreSqlConnection")));
 
