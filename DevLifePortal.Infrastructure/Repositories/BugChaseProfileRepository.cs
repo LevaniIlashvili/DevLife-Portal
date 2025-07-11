@@ -1,5 +1,6 @@
 ﻿using DevLifePortal.Application.Contracts.Infrastructure;
 using DevLifePortal.Domain.Entities;
+using DevLifePortal.Infrastructure.Postgres;
 using Microsoft.EntityFrameworkCore;
 
 namespace DevLifePortal.Infrastructure.Repositories

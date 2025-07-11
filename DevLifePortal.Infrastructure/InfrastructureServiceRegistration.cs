@@ -4,6 +4,7 @@ using DevLifePortal.Application.Services;
 using DevLifePortal.Domain.Entities;
 using DevLifePortal.Infrastructure.Configuration;
 using DevLifePortal.Infrastructure.Mongo;
+using DevLifePortal.Infrastructure.Postgres;
 using DevLifePortal.Infrastructure.Repositories;
 using DevLifePortal.Infrastructure.Services;
 using Microsoft.EntityFrameworkCore;
