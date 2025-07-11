@@ -1,5 +1,8 @@
 ﻿using DevLifePortal.Application.Contracts.Application;
+using DevLifePortal.Application.DTOs;
 using DevLifePortal.Domain.Entities;
+using DevLifePortal.Domain.Enums;
+using Microsoft.AspNetCore.Mvc;
 
 namespace DevLifePortal.Api.Endpoints
 {
@@ -9,12 +12,17 @@ namespace DevLifePortal.Api.Endpoints
         {
             var excusesGroup = app.MapGroup("/excuses").WithTags("Excuse Generator");
 
-            excusesGroup.MapGet("/generate", (
+            excusesGroup.MapGet("/generate", async (
                 IExcuseGeneratorService excuseGeneratorService,
-                string category,
-                string type) =>
+                [FromQuery] string category,
+                [FromQuery] ExcuseType type) =>
             {
-                var excuse = excuseGeneratorService.Generate(category, type);
+                var dto = new ExcuseGeneratorGenerateExcuseDTO()
+                {
+                    Category = category,
+                    Type = type
+                };
+                var excuse = await excuseGeneratorService.Generate(dto);
                 return Results.Ok(excuse);
             });
 

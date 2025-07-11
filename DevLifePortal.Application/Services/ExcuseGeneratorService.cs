@@ -1,6 +1,6 @@
 ﻿using DevLifePortal.Application.Contracts.Application;
+using DevLifePortal.Application.DTOs;
 using DevLifePortal.Domain.Entities;
-using DevLifePortal.Domain.Enums;
 using Microsoft.Extensions.Caching.Distributed;
 using System.Text.Json;
 
@@ -37,23 +37,22 @@ namespace DevLifePortal.Application.Services
             _cache = cache;            
         }
 
-        public Excuse Generate(string category, string type)
+        public async Task<Excuse> Generate(ExcuseGeneratorGenerateExcuseDTO excuseDTO)
         {
-            if (!Enum.TryParse<ExcuseType>(type, true, out var parsedType))
             {
                 throw new Exceptions.BadRequestException("Invalid excuse type");
             }
 
             var rand = new Random();
-            var text = Templates.TryGetValue(parsedType.ToString(), out var list)
+            var text = Templates.TryGetValue(excuseDTO.Type.ToString(), out var list)
                 ? list[rand.Next(list.Length)]
                 : "მიუხედავად ყველაფრისა, უბრალოდ ვერ მოვალ.";
 
             var excuse = new Excuse()
             {
                 Id = Guid.NewGuid(),
-                Category = category,
-                Type = parsedType.ToString(),
+                Category = excuseDTO.Category,
+                Type = excuseDTO.Type.ToString(),
                 Text = text
             };
 
