@@ -22,13 +22,9 @@ namespace DevLifePortal.Application.Validators
                 .LessThan(DateOnly.FromDateTime(DateTime.Now))
                 .WithMessage("Date of birth must be in the past");
 
-            RuleFor(u => u.TechStack)
-                .Must(value => Enum.TryParse<TechStack>(value, true, out _))
-                .WithMessage("Tech stack must be a valid value");
+            RuleFor(u => u.TechStack).IsInEnum();
 
-            RuleFor(u => u.ExperienceLevel)
-                .Must(value => Enum.TryParse<ExperienceLevel>(value, true, out _))
-                .WithMessage("Experiencel level must be a valid value");
+            RuleFor(u => u.ExperienceLevel).IsInEnum();
         }
     }
 
