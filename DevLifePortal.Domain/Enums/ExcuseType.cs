@@ -2,8 +2,8 @@
 {
     public enum ExcuseType
     {
-        Technical,
-        Personal,
-        Creative
+        Technical = 0,
+        Personal = 1,
+        Creative = 2
     }
 }

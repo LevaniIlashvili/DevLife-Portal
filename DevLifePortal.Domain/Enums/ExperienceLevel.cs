@@ -2,8 +2,8 @@
 {
     public enum ExperienceLevel
     {
-        Junior,
-        Middle,
-        Senior
+        Junior = 0,
+        Middle = 1,
+        Senior = 2
     }
 }

@@ -2,10 +2,10 @@
 {
     public enum TechStack
     {
-        Javascript,
-        Typescript,
-        React,
-        Angular,
-        Net
+        Javascript = 0,
+        Typescript = 1,
+        React = 2,
+        Angular = 3,
+        Net = 4
     }
 }
