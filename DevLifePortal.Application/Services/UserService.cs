@@ -43,7 +43,7 @@ namespace DevLifePortal.Application.Services
         }
 
         public async Task<UserDTO?> GetUserByIdAsync(int userId)
-        {
+        { 
             var user = await _userRepository.GetByIdAsync(userId);
 
             if (user == null)
@@ -74,16 +74,8 @@ namespace DevLifePortal.Application.Services
 
             var mappedUser = _mapper.Map<User>(newUser);
             mappedUser.ZodiacSign = GetZodiacSign(newUser.DateOfBirth);
-
-            if (Enum.TryParse<TechStack>(newUser.TechStack, true, out var parsedStack))
-            {
-                mappedUser.TechStack = parsedStack.ToString();
-            }
-
-            if (Enum.TryParse<ExperienceLevel>(newUser.ExperienceLevel, true, out var parsedExperienceLevel))
-            {
-                mappedUser.ExperienceLevel = parsedExperienceLevel.ToString();
-            }
+            mappedUser.TechStack = newUser.TechStack.ToString();
+            mappedUser.ExperienceLevel = newUser.ExperienceLevel.ToString();
 
             var user = await _userRepository.AddAsync(mappedUser);
 
