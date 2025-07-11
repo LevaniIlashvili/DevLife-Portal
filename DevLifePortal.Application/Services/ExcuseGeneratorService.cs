@@ -1,6 +1,8 @@
 ﻿using DevLifePortal.Application.Contracts.Application;
 using DevLifePortal.Application.DTOs;
+using DevLifePortal.Application.Validators;
 using DevLifePortal.Domain.Entities;
+using FluentValidation;
 using Microsoft.Extensions.Caching.Distributed;
 using System.Text.Json;
 
@@ -39,8 +41,11 @@ namespace DevLifePortal.Application.Services
 
         public async Task<Excuse> Generate(ExcuseGeneratorGenerateExcuseDTO excuseDTO)
         {
+            var validator = new ExcuseGeneratorGeneratoExcuseDTOValidator();
+            var result = await validator.ValidateAsync(excuseDTO);
+            if (!result.IsValid)
             {
-                throw new Exceptions.BadRequestException("Invalid excuse type");
+                throw new ValidationException(result.Errors);
             }
 
             var rand = new Random();
