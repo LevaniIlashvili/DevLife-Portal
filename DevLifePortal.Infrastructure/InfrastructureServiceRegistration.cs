@@ -6,7 +6,7 @@ using DevLifePortal.Infrastructure.Configuration;
 using DevLifePortal.Infrastructure.Mongo;
 using DevLifePortal.Infrastructure.Postgres;
 using DevLifePortal.Infrastructure.Repositories;
-using DevLifePortal.Infrastructure.Services;
+using DevLifePortal.Infrastructure.Services.Github;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;

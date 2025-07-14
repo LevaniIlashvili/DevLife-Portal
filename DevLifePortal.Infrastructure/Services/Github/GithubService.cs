@@ -1,12 +1,13 @@
 ﻿using DevLifePortal.Application.Contracts.Infrastructure;
 using DevLifePortal.Domain.Entities;
 using DevLifePortal.Infrastructure.Configuration;
+using DevLifePortal.Infrastructure.Services.Github.Models;
 using Microsoft.Extensions.Options;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json;
 
-namespace DevLifePortal.Infrastructure.Services
+namespace DevLifePortal.Infrastructure.Services.Github
 {
     public class GithubService : IGithubService
     {
@@ -21,35 +22,31 @@ namespace DevLifePortal.Infrastructure.Services
 
         public async Task<string> ExchangeCodeForAccessTokenAsync(string code)
         {
-            var clientId = _githubOAuthOptions.ClientId;
-            var clientSecret = _githubOAuthOptions.ClientSecret;
+            var githubTokenRequest = new GithubAccessTokenRequest(
+                _githubOAuthOptions.ClientId,
+                _githubOAuthOptions.ClientSecret,
+                code);
 
             var request = new HttpRequestMessage(HttpMethod.Post, "https://github.com/login/oauth/access_token");
             request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-            request.Content = new FormUrlEncodedContent(new Dictionary<string, string>
-            {
-                { "client_id", clientId },
-                { "client_secret", clientSecret },
-                { "code", code }
-            });
+            request.Content = githubTokenRequest.ToFormContent();
 
             var response = await _httpClient.SendAsync(request);
             var json = await response.Content.ReadAsStringAsync();
-            var obj = JsonSerializer.Deserialize<JsonElement>(json);
-            return obj.GetProperty("access_token").GetString();
+            var obj = JsonSerializer.Deserialize<GithubAccessTokenResponse>(json);
+            return obj.AccessToken;
         }
 
         public async Task<string> GetGitHubUsernameAsync(string accessToken)
         {
             var request = new HttpRequestMessage(HttpMethod.Get, "https://api.github.com/user");
             request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
-            request.Headers.UserAgent.Add(new ProductInfoHeaderValue("DevLifePortal", "1.0"));
 
             var response = await _httpClient.SendAsync(request);
             var json = await response.Content.ReadAsStringAsync();
-            var obj = JsonSerializer.Deserialize<JsonElement>(json);
+            var obj = JsonSerializer.Deserialize<GithubLoginResponse>(json);
 
-            return obj.GetProperty("login").GetString();
+            return obj.Login;
         }
 
         public async Task<List<string>> GetUserRepositoriesAsync(string accessToken)
@@ -71,22 +68,16 @@ namespace DevLifePortal.Infrastructure.Services
 
             var request = new HttpRequestMessage(HttpMethod.Post, "https://api.github.com/graphql");
             request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
-            request.Headers.UserAgent.ParseAdd("DevLife-Portal");
             request.Content = new StringContent(JsonSerializer.Serialize(query), Encoding.UTF8, "application/json");
 
             var response = await _httpClient.SendAsync(request);
             response.EnsureSuccessStatusCode();
 
             var json = await response.Content.ReadAsStringAsync();
-            using var doc = JsonDocument.Parse(json);
+            var result = JsonSerializer.Deserialize<GithubRepositoriesResponse>(json);
 
-            var repos = doc.RootElement
-                .GetProperty("data")
-                .GetProperty("viewer")
-                .GetProperty("repositories")
-                .GetProperty("nodes")
-                .EnumerateArray()
-                .Select(repo => repo.GetProperty("nameWithOwner").GetString())
+            var repos = result.Data.Viewer.Repositories.Nodes
+                .Select(n => n.NameWithOwner)
                 .ToList();
 
             return repos;
@@ -131,31 +122,21 @@ namespace DevLifePortal.Infrastructure.Services
 
             var request = new HttpRequestMessage(HttpMethod.Post, "https://api.github.com/graphql");
             request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
-            request.Headers.UserAgent.ParseAdd("DevLife-Portal");
             request.Content = new StringContent(JsonSerializer.Serialize(query), Encoding.UTF8, "application/json");
 
             var response = await _httpClient.SendAsync(request);
             response.EnsureSuccessStatusCode();
 
             var json = await response.Content.ReadAsStringAsync();
-            using var doc = JsonDocument.Parse(json);
-            var root = doc.RootElement.GetProperty("data").GetProperty("repository");
+            var result = JsonSerializer.Deserialize<GithubRepoAnalysisResponse>(json);
 
-            var files = root
-                .GetProperty("object")
-                .GetProperty("entries")
-                .EnumerateArray()
-                .Where(e => e.GetProperty("type").GetString() == "blob")
-                .Select(e => e.GetProperty("name").GetString())
+            var files = result.Data.Repository.Object.Entries
+                .Where(e => e.Type == "blob")
+                .Select(e => e.Name)
                 .ToList();
 
-            var commits = root
-                .GetProperty("defaultBranchRef")
-                .GetProperty("target")
-                .GetProperty("history")
-                .GetProperty("edges")
-                .EnumerateArray()
-                .Select(e => e.GetProperty("node").GetProperty("message").GetString())
+            var commits = result.Data.Repository.DefaultBranchRef.Target.History.Edges
+                .Select(e => e.Node.Message)
                 .ToList();
 
             var personality = AnalyzePersonality(files, commits);
