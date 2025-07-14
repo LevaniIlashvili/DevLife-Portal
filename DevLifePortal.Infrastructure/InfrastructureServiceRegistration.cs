@@ -74,7 +74,10 @@ namespace DevLifePortal.Infrastructure
             services.AddScoped<IDevDateSwipeRepository, DevDateSwipeRepository>();
             services.AddScoped<ICodeCasinoChallengeRepository, CodeCasinoChallengeRepository>();
 
-            services.AddHttpClient<IGithubService, GithubService>();
+            services.AddHttpClient<IGithubService, GithubService>(client =>
+            {
+                client.DefaultRequestHeaders.UserAgent.ParseAdd("DevLifePortal/1.0");
+            });
 
             services.AddSingleton<IOpenAiService, OpenAiService>();
 
